@@ -9,4 +9,19 @@ module.exports.home = (req, res) => {
   }
 
 
-  module.exports.signup = 
+  module.exports.signup = (req, res) => {
+    const { name, email, phoneNumber, address, query } = req.body;
+  
+    // Check if all fields are provided
+    if (!name || !email || !phoneNumber || !address || !query) {
+      return res.status(400).json({ message: 'Please fill in all the details' });
+    }
+  
+    // Add user to the database (dummy implementation)
+    users.push({ name, email, phoneNumber, address, query });
+    
+    // You can add logic to save the user data to a real database here
+  
+    res.status(200).json({ message: 'User registered successfully' });
+  }
+  

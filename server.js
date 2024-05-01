@@ -28,10 +28,23 @@ const swaggerDefinition = {
         description: 'login api'
     }],
 };
+ 
+const swaggerDefinition2 = {
+    openapi: '3.0.0',
+    info: {
+        title: 'Signup API',
+        version: '1.0.0',
+        description: 'API documentation for user signup',
+    },
+    servers:[{
+        url: 'http://localhost:3000',
+        description: 'signup api'
+    }],
+};
 
 
 const options = {
-    swaggerDefinition,
+    swaggerDefinition, swaggerDefinition2,
     apis: ['./routes/*.js'],
 };
 
