@@ -27,7 +27,7 @@ const swaggerDefinition = {
     }],
 };
  
-const swaggerDefinition2 = {
+/*const swaggerDefinition2 = {
     openapi: '3.0.0',
     info: {
         title: 'Signup API',
@@ -52,10 +52,10 @@ const swaggerDefinition3 = {
         description: 'signup api'
     }],
 };
-
+*/
 
 const options = {
-    swaggerDefinition, swaggerDefinition2, swaggerDefinition3,
+    swaggerDefinition,
     apis: ['./routes/*.js'],
 };
 
