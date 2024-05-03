@@ -94,12 +94,18 @@
             "type": "string"
           },
           {
-            "name": "Password",
-            "description": "User's password.",
+            "name": "Address",
+            "description": "User's address.",
             "in": "formData",
             "required": true,
-            "type": "string",
-            "format": "password"
+            "type": "string"
+          },
+          {
+            "name": "Query",
+            "description": "User's query request.",
+            "in": "formData",
+            "required": true,
+            "type": "string"
           }
         ],
         "responses": {

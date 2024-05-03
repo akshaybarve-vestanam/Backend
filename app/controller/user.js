@@ -1,4 +1,5 @@
 const Users = require("../models/user");
+
 let predefinedLabels = ['L1', 'L2', 'L3'];
 
 module.exports.login = (req, res) => {
@@ -16,20 +17,20 @@ module.exports.login = (req, res) => {
   }
 
 
-  module.exports.signup = (req, res) => {
-    const { name, email, phoneNumber, address, query } = req.body;
+  module.exports.signup = async (req, res) => {
+    const { name, email, contact, address, query } = req.body;
   
-    // Check if all fields are provided
-    if (!name || !email || !phoneNumber || !address || !query) {
-      return res.status(400).json({ message: 'Please fill in all the details' });
+    if (!name || !email || !contact || !address || !query) {
+      return res.json({ s: false, d: 'Please fill in all the details' });
     }
   
-    // Add user to the database (dummy implementation)
-    users.push({ name, email, phoneNumber, address, query });
-    
-    // You can add logic to save the user data to a real database here
-  
-    res.status(200).json({ message: 'User registered successfully' });
+    try {
+      await Users.create({ name, email, phoneNumber, address, query });
+      res.json({ s: true, d: 'User registered successfully' });
+    } catch (error) {
+      console.error('Error creating user:', error);
+      res.json({ s: false, d: 'Error registering user' });
+    }
   }
  
   
