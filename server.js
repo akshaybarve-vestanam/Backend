@@ -65,7 +65,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //const swaggerSpec = swaggerJSDoc(options);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument,options));
-
+app.get('/labels', (req, res) => {
+    res.json({ labels: predefinedLabels });
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

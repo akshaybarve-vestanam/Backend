@@ -1,4 +1,5 @@
 const Users = require("../models/user");
+let predefinedLabels = ['L1', 'L2', 'L3'];
 
 module.exports.login = (req, res) => {
     const { username } = req.body;
@@ -30,4 +31,13 @@ module.exports.login = (req, res) => {
   
     res.status(200).json({ message: 'User registered successfully' });
   }
+ 
   
+  module.exports.labels = (req, res) => {
+    const { label } = req.body;
+    if (!label || predefinedLabels.includes(label)) {
+        return res.status(400).json({ message: 'Label already exists or is not provided' });
+    }
+    predefinedLabels.push(label);
+    res.status(200).json({ message: 'Label created successfully', label });
+}

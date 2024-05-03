@@ -1,61 +1,147 @@
 {
-    "swagger": "2.0",
-    "info": {
-      "version": "1.0.0",
-      "title": "Authentication APIs",
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Authentication APIs",
+    "description": "APIs for user authentication"
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "schemes": ["http"],
+  "tags": [
+    {
+      "name": "Authentication",
       "description": "APIs for user authentication"
-    },
-    "host": "localhost:3000",
-    "basePath": "/",
-    "schemes": ["http"],
-    "tags": [
-      {
-        "name": "Authentication",
-        "description": "APIs for user authentication"
-      }
-    ],
-    "paths": {
-      "/login": {
-        "post": {
-          "tags": ["Authentication"],
-          "summary": "Logs in a user",
-          "description": "Logs in a user with provided username and OTP.",
-          "produces": ["application/json"],
-          "parameters": [
-            {
-              "name": "username",
-              "description": "User's username.",
-              "in": "formData",
-              "required": true,
-              "type": "string"
-            },
-            {
-              "name": "otp",
-              "description": "User's OTP (One-Time Password).",
-              "in": "formData",
-              "required": true,
-              "type": "string"
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "Successful login",
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "success": {
-                    "type": "boolean",
-                    "example": true
-                  }
+    }
+  ],
+  "paths": {
+    "/login": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Logs in a user",
+        "description": "Logs in a user with provided username and OTP.",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "username",
+            "description": "User's username.",
+            "in": "formData",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "otp",
+            "description": "User's OTP (One-Time Password).",
+            "in": "formData",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful login",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
                 }
               }
-            },
-            "400": {
-              "description": "Invalid request",
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "error": {
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/signup": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Registers a new user",
+        "description": "Registers a new user with provided Name, email, contact no. and password. Please provide a valid email address.",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "Name",
+            "description": "User's Name.",
+            "in": "formData",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Email",
+            "description": "User's email address.",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "format": "email"
+          },
+          {
+            "name": "Contact Number",
+            "description": "User's contact number.",
+            "in": "formData",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Password",
+            "description": "User's password.",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "format": "password"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User registered successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "example": "Username already exists"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/labels": {
+      "get": {
+        "summary": "Get all labels",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "labels": {
+                  "type": "array",
+                  "items": {
                     "type": "string"
                   }
                 }
@@ -64,66 +150,41 @@
           }
         }
       },
-      "/signup": {
-        "post": {
-          "tags": ["Authentication"],
-          "summary": "Registers a new user",
-          "description": "Registers a new user with provided Name, email, contact no. and password. Please provide a valid email address.",
-          "produces": ["application/json"],
-          "parameters": [
-            {
-              "name": "Name",
-              "description": "User's Name.",
-              "in": "formData",
-              "required": true,
+      "post": {
+        "summary": "Create a new label",
+        "parameters": [
+          {
+            "name": "label",
+            "in": "body",
+            "description": "Label name to be created",
+            "required": true,
+            "schema": {
               "type": "string"
-            },
-            {
-              "name": "Email",
-              "description": "User's email address.",
-              "in": "formData",
-              "required": true,
-              "type": "string",
-              "format": "email"
-            },
-            {
-              "name": "Contact Number",
-              "description": "User's contact number.",
-              "in": "formData",
-              "required": true,
-              "type": "string"
-            },
-            {
-              "name": "Password",
-              "description": "User's password.",
-              "in": "formData",
-              "required": true,
-              "type": "string",
-              "format": "password"
             }
-          ],
-          "responses": {
-            "200": {
-              "description": "User registered successfully",
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "success": {
-                    "type": "boolean",
-                    "example": true
-                  }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Label created successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string"
                 }
               }
-            },
-            "400": {
-              "description": "Invalid request",
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "error": {
-                    "type": "string",
-                    "example": "Username already exists"
-                  }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
                 }
               }
             }
@@ -132,4 +193,4 @@
       }
     }
   }
-  
+}
