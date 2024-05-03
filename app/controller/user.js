@@ -2,19 +2,26 @@ const Users = require("../models/user");
 
 let predefinedLabels = ['L1', 'L2', 'L3'];
 
-module.exports.login = (req, res) => {
-    const { username } = req.body;
-    const userExists = users.some(user => user.username === username);
+module.exports.login = async (req, res) => {
+  const { username } = req.body;
 
-    Users.findOne({username:req.body.username})
-    .then((err, user)=>{
-      if (userExists) {
-        res.status(200).json({ exists: true });
-      } else {
-        res.status(404).json({ exists: false });
-      }
-    })
+  if (!username) {
+    return res.status(400).json({ success: false, message: 'Please provide a username' });
   }
+
+  try {
+    const user = await Users.findOne({ username });
+    
+    if (user) {
+      return res.status(200).json({ exists: true });
+    } else {
+      return res.status(404).json({ exists: false });
+    }
+  } catch (error) {
+    console.error('Error finding user:', error);
+    return res.status(500).json({ success: false, message: 'Error finding user' });
+  }
+}
 
 
   module.exports.signup = async (req, res) => {
