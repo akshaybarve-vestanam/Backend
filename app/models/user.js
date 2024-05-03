@@ -18,7 +18,7 @@ const Users = new Schema({
       unique:true,
       trim:true
   },
-  mobileNo: {
+  contact: {
     type: Number,
     minlength: 10,
     maxlength: 10,

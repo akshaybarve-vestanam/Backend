@@ -72,14 +72,21 @@
         "produces": ["application/json"],
         "parameters": [
           {
-            "name": "Name",
+            "name": "name",
             "description": "User's Name.",
             "in": "formData",
             "required": true,
             "type": "string"
           },
           {
-            "name": "Email",
+            "name": "username",
+            "description": "User's username.",
+            "in": "formData",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "email",
             "description": "User's email address.",
             "in": "formData",
             "required": true,
@@ -87,21 +94,21 @@
             "format": "email"
           },
           {
-            "name": "Contact Number",
+            "name": "contact",
             "description": "User's contact number.",
             "in": "formData",
             "required": true,
             "type": "string"
           },
           {
-            "name": "Address",
+            "name": "address",
             "description": "User's address.",
             "in": "formData",
             "required": true,
             "type": "string"
           },
           {
-            "name": "Query",
+            "name": "query",
             "description": "User's query request.",
             "in": "formData",
             "required": true,

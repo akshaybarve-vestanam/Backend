@@ -25,14 +25,17 @@ module.exports.login = async (req, res) => {
 
 
   module.exports.signup = async (req, res) => {
-    const { name, email, contact, address, query } = req.body;
+    console.log(req.body);
+    const { name, username, email, contact, address, query } = req.body;
   
-    if (!name || !email || !contact || !address || !query) {
+    if (!name || !username || !email || !contact || !address || !query ) {
+      
       return res.json({ s: false, d: 'Please fill in all the details' });
+
     }
   
     try {
-      await Users.create({ name, email, phoneNumber, address, query });
+      await Users.create({ name, username , email, contact, address, query });
       res.json({ s: true, d: 'User registered successfully' });
     } catch (error) {
       console.error('Error creating user:', error);
