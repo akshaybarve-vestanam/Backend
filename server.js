@@ -2,9 +2,11 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJSDoc = require('swagger-jsdoc');
+const config = require('./app/config/index').get(process.env.NODE_ENV)
 //const { url } = require('inspector');
 const app = express();
 const swaggerDocument = require('./public/swagger.json');
+require('./app/db');
 
 const users = {
     "user1": "otp1",
@@ -65,12 +67,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //const swaggerSpec = swaggerJSDoc(options);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument,options));
-app.get('/labels', (req, res) => {
-    res.json({ labels: predefinedLabels });
-});
+require('./routes')(app);
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+app.listen(config.port, () => {
+    console.log(`Server is running on port ${config.port}`);
 });
 
