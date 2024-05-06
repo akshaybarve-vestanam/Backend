@@ -33,7 +33,6 @@
             "name": "otp",
             "description": "User's OTP (One-Time Password).",
             "in": "formData",
-            "required": true,
             "type": "string"
           }
         ],
