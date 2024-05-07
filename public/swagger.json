@@ -203,6 +203,73 @@
           }
         }
       }
+    },
+    "/candidates_register": {
+      "post": {
+        "summary": "Register a new candidate",
+        "description": "Registers a new candidate with the provided information",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "candidateID": {
+                    "type": "string",
+                    "description": "Unique identifier for the candidate"
+                  },
+                  "firstName": {
+                    "type": "string",
+                    "description": "First name of the candidate"
+                  },
+                  "lastName": {
+                    "type": "string",
+                    "description": "Last name of the candidate"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "Email address of the candidate"
+                  },
+                  "phoneNumber": {
+                    "type": "string",
+                    "description": "Phone number of the candidate"
+                  },
+                  "address": {
+                    "type": "string",
+                    "description": "Address of the candidate"
+                  },
+                  "organizationID": {
+                    "type": "string",
+                    "description": "Unique identifier for the organization the candidate belongs to"
+                  }
+                },
+                "required": [
+                  "candidateID",
+                  "firstName",
+                  "lastName",
+                  "email",
+                  "phoneNumber",
+                  "organizationID"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Candidate successfully registered"
+          },
+          "400": {
+            "description": "Bad request - Missing or invalid parameters"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
     }
   }
 }
+
