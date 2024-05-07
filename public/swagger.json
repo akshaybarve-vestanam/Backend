@@ -7,7 +7,9 @@
   },
   "host": "localhost:3000",
   "basePath": "/",
-  "schemes": ["http"],
+  "schemes": [
+    "http"
+  ],
   "tags": [
     {
       "name": "Authentication",
@@ -17,10 +19,14 @@
   "paths": {
     "/login": {
       "post": {
-        "tags": ["Authentication"],
+        "tags": [
+          "Authentication"
+        ],
         "summary": "Logs in a user",
         "description": "Logs in a user with provided username and OTP.",
-        "produces": ["application/json"],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "username",
@@ -65,10 +71,14 @@
     },
     "/signup": {
       "post": {
-        "tags": ["Authentication"],
+        "tags": [
+          "Authentication"
+        ],
         "summary": "Registers a new user",
         "description": "Registers a new user with provided Name, email, contact no. and password. Please provide a valid email address.",
-        "produces": ["application/json"],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "name",
@@ -257,6 +267,72 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "candidateID",
+            "in": "path",
+            "required": true,
+            "description": "Unique identifier for the candidate",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "firstName",
+            "in": "path",
+            "required": true,
+            "description": "First name of the candidate",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lastName",
+            "in": "path",
+            "required": true,
+            "description": "Last name of the candidate",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "email",
+            "in": "path",
+            "required": true,
+            "description": "Email address of the candidate",
+            "schema": {
+              "type": "string",
+              "format": "email"
+            }
+          },
+          {
+            "name": "phoneNumber",
+            "in": "path",
+            "required": true,
+            "description": "Phone number of the candidate",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "address",
+            "in": "path",
+            "required": true,
+            "description": "Address of the candidate",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "organizationID",
+            "in": "path",
+            "required": true,
+            "description": "Unique identifier for the organization the candidate belongs to",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "201": {
             "description": "Candidate successfully registered"
@@ -272,4 +348,3 @@
     }
   }
 }
-
