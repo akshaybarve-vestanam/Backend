@@ -24,6 +24,7 @@ const Users = require("../models/candidates");
 
 
   module.exports.candidates_register = async (req, res) => {
+    console.log(req.body)
     const { candidateID, firstName, lastName, email, phoneNumber, address, organizationID } = req.body;
 
     try {

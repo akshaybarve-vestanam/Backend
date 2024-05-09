@@ -214,134 +214,85 @@
         }
       }
     },
-    "/candidates_register": {
+    "/candidate/register": {
       "post": {
-        "summary": "Register a new candidate",
-        "description": "Registers a new candidate with the provided information",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "candidateID": {
-                    "type": "string",
-                    "description": "Unique identifier for the candidate"
-                  },
-                  "firstName": {
-                    "type": "string",
-                    "description": "First name of the candidate"
-                  },
-                  "lastName": {
-                    "type": "string",
-                    "description": "Last name of the candidate"
-                  },
-                  "email": {
-                    "type": "string",
-                    "format": "email",
-                    "description": "Email address of the candidate"
-                  },
-                  "phoneNumber": {
-                    "type": "string",
-                    "description": "Phone number of the candidate"
-                  },
-                  "address": {
-                    "type": "string",
-                    "description": "Address of the candidate"
-                  },
-                  "organizationID": {
-                    "type": "string",
-                    "description": "Unique identifier for the organization the candidate belongs to"
-                  }
-                },
-                "required": [
-                  "candidateID",
-                  "firstName",
-                  "lastName",
-                  "email",
-                  "phoneNumber",
-                  "organizationID"
-                ]
-              }
-            }
-          }
-        },
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Registers a new user",
+        "description": "Registers a new user with provided Name, email, contact no. and password. Please provide a valid email address.",
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
-            "name": "candidateID",
-            "in": "path",
+            "name": "name",
+            "description": "User's Name.",
+            "in": "formData",
             "required": true,
-            "description": "Unique identifier for the candidate",
-            "schema": {
-              "type": "string"
-            }
+            "type": "string"
           },
           {
-            "name": "firstName",
-            "in": "path",
+            "name": "username",
+            "description": "User's username.",
+            "in": "formData",
             "required": true,
-            "description": "First name of the candidate",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "lastName",
-            "in": "path",
-            "required": true,
-            "description": "Last name of the candidate",
-            "schema": {
-              "type": "string"
-            }
+            "type": "string"
           },
           {
             "name": "email",
-            "in": "path",
+            "description": "User's email address.",
+            "in": "formData",
             "required": true,
-            "description": "Email address of the candidate",
-            "schema": {
-              "type": "string",
-              "format": "email"
-            }
+            "type": "string",
+            "format": "email"
           },
           {
-            "name": "phoneNumber",
-            "in": "path",
+            "name": "contact",
+            "description": "User's contact number.",
+            "in": "formData",
             "required": true,
-            "description": "Phone number of the candidate",
-            "schema": {
-              "type": "string"
-            }
+            "type": "string"
           },
           {
             "name": "address",
-            "in": "path",
+            "description": "User's address.",
+            "in": "formData",
             "required": true,
-            "description": "Address of the candidate",
-            "schema": {
-              "type": "string"
-            }
+            "type": "string"
           },
           {
-            "name": "organizationID",
-            "in": "path",
+            "name": "query",
+            "description": "User's query request.",
+            "in": "formData",
             "required": true,
-            "description": "Unique identifier for the organization the candidate belongs to",
-            "schema": {
-              "type": "string"
-            }
+            "type": "string"
           }
         ],
         "responses": {
-          "201": {
-            "description": "Candidate successfully registered"
+          "200": {
+            "description": "User registered successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                }
+              }
+            }
           },
           "400": {
-            "description": "Bad request - Missing or invalid parameters"
-          },
-          "500": {
-            "description": "Internal server error"
+            "description": "Invalid request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "example": "Username already exists"
+                }
+              }
+            }
           }
         }
       }

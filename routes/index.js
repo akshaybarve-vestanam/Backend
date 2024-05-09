@@ -9,5 +9,5 @@ module.exports = (app) => {
     app.post("/signup", user.signup);
     app.get("/labels", labels.get);
     app.post("/labels", labels.create);
-    app.post("/candidates_register", candidates.candidates_register);
+    app.post("/candidate/register", candidates.candidates_register);
 }
