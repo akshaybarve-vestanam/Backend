@@ -300,6 +300,96 @@
                 }
               }
             }
+          },
+          "/candidate/edit": {
+            "post": {
+              "tags": [
+                "Candidate"
+              ],
+              "summary": "Edit candidate information",
+              "description": "Edit candidate information with provided ID. Please provide the candidate's ID and the fields you want to update.",
+              "produces": [
+                "application/json"
+              ],
+              "parameters": [
+                {
+                  "name": "candidateID",
+                  "description": "Candidate's ID",
+                  "in": "formData",
+                  "required": true,
+                  "type": "string"
+                },
+                {
+                  "name": "firstName",
+                  "description": "Updated first name",
+                  "in": "formData",
+                  "required": false,
+                  "type": "string"
+                },
+                {
+                  "name": "lastName",
+                  "description": "Updated last name",
+                  "in": "formData",
+                  "required": false,
+                  "type": "string"
+                },
+                {
+                  "name": "email",
+                  "description": "Updated email address",
+                  "in": "formData",
+                  "required": false,
+                  "type": "string",
+                  "format": "email"
+                },
+                {
+                  "name": "phoneNumber",
+                  "description": "Updated contact number",
+                  "in": "formData",
+                  "required": false,
+                  "type": "string"
+                },
+                {
+                  "name": "address",
+                  "description": "Updated address",
+                  "in": "formData",
+                  "required": false,
+                  "type": "string"
+                },
+                {
+                  "name": "organizationID",
+                  "description": "Updated organization ID",
+                  "in": "formData",
+                  "required": false,
+                  "type": "string"
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Candidate information updated successfully",
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "success": {
+                        "type": "boolean",
+                        "example": true
+                      }
+                    }
+                  }
+                },
+                "400": {
+                  "description": "Invalid request",
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "error": {
+                        "type": "string",
+                        "example": "Candidate not found"
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }

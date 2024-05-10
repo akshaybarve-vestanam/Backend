@@ -42,3 +42,41 @@ const Users = require("../models/candidates");
         res.status(500).json({ error: 'Error registering candidate' });
     }
 };
+
+
+
+module.exports.candidates_edit = async (req, res) => {
+    console.log(req.body);
+    const { candidateID, firstName, lastName, email, phoneNumber, address, organizationID } = req.body;
+
+    try {
+        // Check if candidateID is provided
+        if (!candidateID) {
+            return res.status(400).json({ error: 'Candidate ID is required' });
+        }
+
+        // Check if at least one field to update is provided
+        if (!firstName && !lastName && !email && !phoneNumber && !address && !organizationID) {
+            return res.status(400).json({ error: 'No fields to update' });
+        }
+
+        // Process update (update database record, etc.)
+        // For demonstration, assuming Candidate model exists with update method
+        const candidate = await Candidate.findOneAndUpdate(
+            { candidateID: candidateID },
+            { $set: { firstName, lastName, email, phoneNumber, address, organizationID } },
+            { new: true }
+        );
+
+        // Check if candidate exists
+        if (!candidate) {
+            return res.status(404).json({ error: 'Candidate not found' });
+        }
+
+        // If candidate is successfully updated
+        res.status(200).json({ message: 'Candidate information updated successfully' });
+    } catch (error) {
+        console.error('Error updating candidate:', error);
+        res.status(500).json({ error: 'Error updating candidate' });
+    }
+};
