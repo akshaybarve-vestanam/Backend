@@ -226,15 +226,22 @@
         ],
         "parameters": [
           {
-            "name": "name",
-            "description": "User's Name.",
+            "name": "candidateID",
+            "description": "Candidate's ID",
             "in": "formData",
             "required": true,
             "type": "string"
           },
           {
-            "name": "username",
-            "description": "User's username.",
+            "name": "firstName",
+            "description": "User's first name",
+            "in": "formData",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "lastName",
+            "description": "User's last name",
             "in": "formData",
             "required": true,
             "type": "string"
@@ -248,7 +255,7 @@
             "format": "email"
           },
           {
-            "name": "contact",
+            "name": "phoneNumber",
             "description": "User's contact number.",
             "in": "formData",
             "required": true,
@@ -262,8 +269,8 @@
             "type": "string"
           },
           {
-            "name": "query",
-            "description": "User's query request.",
+            "name": "organizationID",
+            "description": "User's organization ID",
             "in": "formData",
             "required": true,
             "type": "string"
