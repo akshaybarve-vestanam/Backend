@@ -304,7 +304,7 @@
           "/candidate/edit": {
             "post": {
               "tags": [
-                "Candidate"
+                "Authentication"
               ],
               "summary": "Edit candidate information",
               "description": "Edit candidate information with provided ID. Please provide the candidate's ID and the fields you want to update.",
@@ -317,7 +317,7 @@
                   "description": "Candidate's ID",
                   "in": "formData",
                   "required": true,
-                  "type": "string"
+                  "type": "number"
                 },
                 {
                   "name": "firstName",
@@ -360,7 +360,7 @@
                   "description": "Updated organization ID",
                   "in": "formData",
                   "required": false,
-                  "type": "string"
+                  "type": "number"
                 }
               ],
               "responses": {

@@ -10,4 +10,5 @@ module.exports = (app) => {
     app.get("/labels", labels.get);
     app.post("/labels", labels.create);
     app.post("/candidate/register", candidates.candidates_register);
+    app.post("/candidate/edit",candidates.candidates_edit);
 }
