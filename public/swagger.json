@@ -230,7 +230,7 @@
             "description": "Candidate's ID",
             "in": "formData",
             "required": true,
-            "type": "string"
+            "type": "number"
           },
           {
             "name": "firstName",
@@ -273,7 +273,7 @@
             "description": "User's organization ID",
             "in": "formData",
             "required": true,
-            "type": "string"
+            "type": "number"
           }
         ],
         "responses": {
