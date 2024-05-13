@@ -3,21 +3,23 @@ const { sendOTP } = require('./sendOTP');
 
 let predefinedLabels = ['L1', 'L2', 'L3'];
 
-module.exports.sendOTP = async (req, res) => {
-  const { username } = req.body;
 
-  if (!username) {
-      return res.status(400).json({ success: false, message: 'Please provide an email' });
+module.exports.sendOTP = async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+      return res.status(400).json({ message: 'Email is required' });
   }
 
-  const result = await sendOTP(email);
-
-  if (result.success) {
-      return res.status(200).json({ success: true, message: 'OTP sent successfully' });
-  } else {
-      return res.status(500).json({ success: false, message: 'Failed to send OTP' });
+  try {
+      const otp = await sendOTP(email); // Send OTP via email
+      res.status(200).json({ message: 'OTP sent successfully', otp });
+  } catch (error) {
+      console.error('Error sending OTP:', error);
+      res.status(500).json({ message: 'Internal server error' });
   }
 }
+
 
 
 module.exports.login = async (req, res) => {
