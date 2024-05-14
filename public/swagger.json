@@ -7,9 +7,7 @@
   },
   "host": "localhost:3000",
   "basePath": "/",
-  "schemes": [
-    "http"
-  ],
+  "schemes": ["http"],
   "tags": [
     {
       "name": "Authentication",
@@ -19,14 +17,10 @@
   "paths": {
     "/login": {
       "post": {
-        "tags": [
-          "Authentication"
-        ],
+        "tags": ["Authentication"],
         "summary": "Logs in a user",
         "description": "Logs in a user with provided username and OTP.",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "parameters": [
           {
             "name": "username",
@@ -71,14 +65,10 @@
     },
     "/signup": {
       "post": {
-        "tags": [
-          "Authentication"
-        ],
+        "tags": ["Authentication"],
         "summary": "Registers a new user",
         "description": "Registers a new user with provided Name, email, contact no. and password. Please provide a valid email address.",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "parameters": [
           {
             "name": "name",
@@ -216,14 +206,10 @@
     },
     "/candidate/register": {
       "post": {
-        "tags": [
-          "Authentication"
-        ],
+        "tags": ["Authentication"],
         "summary": "Registers a new user",
         "description": "Registers a new user with provided Name, email, contact no. and password. Please provide a valid email address.",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "parameters": [
           {
             "name": "candidateID",
@@ -300,160 +286,156 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/candidate/edit": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Edit candidate information",
+        "description": "Edit candidate information with provided ID. Please provide the candidate's ID and the fields you want to update.",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "candidateID",
+            "description": "Candidate's ID",
+            "in": "formData",
+            "required": true,
+            "type": "number"
           },
-          "/candidate/edit": {
-            "post": {
-              "tags": [
-                "Authentication"
-              ],
-              "summary": "Edit candidate information",
-              "description": "Edit candidate information with provided ID. Please provide the candidate's ID and the fields you want to update.",
-              "produces": [
-                "application/json"
-              ],
-              "parameters": [
-                {
-                  "name": "candidateID",
-                  "description": "Candidate's ID",
-                  "in": "formData",
-                  "required": true,
-                  "type": "number"
-                },
-                {
-                  "name": "firstName",
-                  "description": "Updated first name",
-                  "in": "formData",
-                  "required": false,
-                  "type": "string"
-                },
-                {
-                  "name": "lastName",
-                  "description": "Updated last name",
-                  "in": "formData",
-                  "required": false,
-                  "type": "string"
-                },
-                {
-                  "name": "email",
-                  "description": "Updated email address",
-                  "in": "formData",
-                  "required": false,
-                  "type": "string",
-                  "format": "email"
-                },
-                {
-                  "name": "phoneNumber",
-                  "description": "Updated contact number",
-                  "in": "formData",
-                  "required": false,
-                  "type": "string"
-                },
-                {
-                  "name": "address",
-                  "description": "Updated address",
-                  "in": "formData",
-                  "required": false,
-                  "type": "string"
-                },
-                {
-                  "name": "organizationID",
-                  "description": "Updated organization ID",
-                  "in": "formData",
-                  "required": false,
-                  "type": "number"
-                }
-              ],
-              "responses": {
-                "200": {
-                  "description": "Candidate information updated successfully",
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "success": {
-                        "type": "boolean",
-                        "example": true
-                      }
-                    }
-                  }
-                },
-                "400": {
-                  "description": "Invalid request",
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "error": {
-                        "type": "string",
-                        "example": "Candidate not found"
-                      }
-                    }
-                  }
+          {
+            "name": "firstName",
+            "description": "Updated first name",
+            "in": "formData",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "lastName",
+            "description": "Updated last name",
+            "in": "formData",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "email",
+            "description": "Updated email address",
+            "in": "formData",
+            "required": false,
+            "type": "string",
+            "format": "email"
+          },
+          {
+            "name": "phoneNumber",
+            "description": "Updated contact number",
+            "in": "formData",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "address",
+            "description": "Updated address",
+            "in": "formData",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "organizationID",
+            "description": "Updated organization ID",
+            "in": "formData",
+            "required": false,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Candidate information updated successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
                 }
               }
             }
           },
-          "/sendOTP": {
-            "post": {
-              "summary": "Send OTP via email",
-              "description": "Send OTP to the provided email address",
-              "consumes": ["application/json"],
-              "produces": ["application/json"],
-              "parameters": [
-                {
-                  "in": "body",
-                  "name": "body",
-                  "description": "Object containing email address",
-                  "required": true,
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "email": {
-                        "type": "string",
-                        "example": "user@example.com"
-                      }
-                    }
-                  }
+          "400": {
+            "description": "Invalid request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "example": "Candidate not found"
                 }
-              ],
-              "responses": {
-                "200": {
-                  "description": "OK",
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "message": {
-                        "type": "string",
-                        "example": "OTP sent successfully"
-                      },
-                      "otp": {
-                        "type": "string",
-                        "example": "123456"
-                      }
-                    }
-                  }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sendOTP": {
+      "post": {
+        "summary": "Send OTP via email",
+        "description": "Send OTP to the provided email address",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Object containing email address",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "user@example.com"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "OTP sent successfully"
                 },
-                "400": {
-                  "description": "Bad Request",
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "message": {
-                        "type": "string",
-                        "example": "Email is required"
-                      }
-                    }
-                  }
-                },
-                "500": {
-                  "description": "Internal Server Error",
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "message": {
-                        "type": "string",
-                        "example": "Internal server error"
-                      }
-                    }
-                  }
+                "otp": {
+                  "type": "string",
+                  "example": "123456"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Email is required"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Internal server error"
                 }
               }
             }
