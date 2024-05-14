@@ -57,11 +57,11 @@ module.exports.login = async (req, res) => {
 module.exports.requestOtp = async (req, res) => {
   const { email } = req.body;
   console.log("request body",req.body)
-  if (email) {
+//  if (email) {
     try {
       // Check if the email is registered
-      const user = await Users.findOne({ where: { email } });
-  
+      const user = await Users.findOne({ email });
+      console.log(user);
       if (!user) {
         return res.json({ s: false, m: "Email not registered" });
       }
@@ -74,23 +74,23 @@ module.exports.requestOtp = async (req, res) => {
     };
 
     // send mail with defined transport object
-    transporter.sendMail(mailOptions, function (error, info) {
+   /* transporter.sendMail(mailOptions, function (error, info) {
       if (error) {
         console.log(error);
       }
       console.log('Message sent: ' + info.response);
-      return res.json({ s: true, m: "OTP sent" })
-    })
-
+     
+    })*/
+    return res.json({ s: true, m: "OTP sent" })
   } 
     catch (error) {
     console.error('Error checking email:', error);
     return res.json({ s: false, m: "Error processing request" });
     }
-  }
+  /*}
   else {
     return res.json({ s: false, m: "Please enter email id" })
-  }
+  }*/
 }
 
 
