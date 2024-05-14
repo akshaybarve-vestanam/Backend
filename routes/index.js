@@ -5,6 +5,7 @@ const candidates = require("../app/controller/candidates.js")
 
 module.exports = (app) => {
     app.post("/sendOTP", user.sendOTP);
+    app.post("/user/otp", user.requestOtp);
     app.post("/login", user.login);
     app.post("/signup", user.signup);
     app.get("/labels", labels.get);
