@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
 });
 
 
-module.exports.sendOTP = async (req, res) => {
+/*module.exports.sendOTP = async (req, res) => {
   const { email } = req.body;
 
   if (!email) {
@@ -30,7 +30,7 @@ module.exports.sendOTP = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 }
-
+*/
 
 
 module.exports.login = async (req, res) => {
@@ -58,6 +58,13 @@ module.exports.requestOtp = async (req, res) => {
   const { email } = req.body;
   console.log("request body",req.body)
   if (email) {
+    try {
+      // Check if the email is registered
+      const user = await Users.findOne({ where: { email } });
+  
+      if (!user) {
+        return res.json({ s: false, m: "Email not registered" });
+      }
     var mailOptions = {
       from: '"Introspects No-reply" <donotreply@introspects.in>', // sender address (who sends)
       to: email, // list of receivers (who receives)
@@ -75,7 +82,13 @@ module.exports.requestOtp = async (req, res) => {
       return res.json({ s: true, m: "OTP sent" })
     })
 
-  } else {
+  } 
+    catch (error) {
+    console.error('Error checking email:', error);
+    return res.json({ s: false, m: "Error processing request" });
+    }
+  }
+  else {
     return res.json({ s: false, m: "Please enter email id" })
   }
 }
