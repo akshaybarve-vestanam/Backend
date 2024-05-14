@@ -56,7 +56,7 @@ module.exports.login = async (req, res) => {
 
 module.exports.requestOtp = async (req, res) => {
   const { email } = req.body;
-  console.log(req.body)
+  console.log("request body",req.body)
   if (email) {
     var mailOptions = {
       from: '"Introspects No-reply" <donotreply@introspects.in>', // sender address (who sends)

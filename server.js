@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJSDoc = require('swagger-jsdoc');
+const cors = require('cors')
 const config = require('./app/config/index').get(process.env.NODE_ENV)
 //const { url } = require('inspector');
 const app = express();
@@ -13,6 +14,7 @@ const users = {
     "user2": "otp2",
 };
 
+app.use(cors())
 
 
 // Swagger setup
