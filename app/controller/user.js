@@ -1,8 +1,11 @@
 const Users = require("../models/user");
 const { sendOTP } = require('./sendOTP');
 const nodemailer = require('nodemailer')
+const jwt = require('jsonwebtoken');
 
 let predefinedLabels = ['L1', 'L2', 'L3'];
+const secretKey = 'eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTcxNTc2NjExNCwiaWF0IjoxNzE1NzY2MTE0fQ.x_4EmzrgS8xjoWQYGK9l5EXP0FM5zwEZZHlmedW4itA';
+
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -44,9 +47,12 @@ module.exports.login = async (req, res) => {
     const user = await Users.findOne({ username });
 
     if (user) {
-      return res.status(200).json({ exists: true });
+      const token = jwt.sign({ id: user.id, username: user.username }, secretKey, { expiresIn: '1h' });
+      res.cookie('authToken', token, { httpOnly: true, secure: true }); 
+
+      return res.status(200).json({ success: true, message: 'Login successful', exists: true });
     } else {
-      return res.status(404).json({ exists: false });
+      return res.status(404).json({ success: false, message: 'User not found', exists: false });
     }
   } catch (error) {
     console.error('Error finding user:', error);
