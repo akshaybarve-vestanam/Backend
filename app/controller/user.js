@@ -37,22 +37,23 @@ const transporter = nodemailer.createTransport({
 
 
 module.exports.login = async (req, res) => {
-  const { username } = req.body;
+  // { username } = req.body;
 
-  if (!username) {
+  /*if (!username) {
     return res.status(400).json({ success: false, message: 'Please provide a username' });
-  }
+  }*/
+  username = 'akshay';
 
   try {
     const user = await Users.findOne({ username });
 
     if (user) {
-      const token = jwt.sign({ id: user.id, username: user.username }, secretKey, { expiresIn: '1h' });
+      const token = jwt.sign({ username: user.username }, secretKey, { expiresIn: '1h' });
       res.cookie('authToken', token, { httpOnly: true, secure: true }); 
 
       return res.status(200).json({ success: true, message: 'Login successful', exists: true });
     } else {
-      return res.status(404).json({ success: false, message: 'User not found', exists: false });
+      return res.status(400).json({ success: false, message: 'User not found', exists: false });
     }
   } catch (error) {
     console.error('Error finding user:', error);
