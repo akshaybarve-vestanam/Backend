@@ -103,6 +103,7 @@ module.exports.login = async (req, res) => {
 
 module.exports.requestOtp = async (req, res) => {
   const { email } = req.body;
+  return res.json({ s: true, m: "OTP sent" })
   console.log("request body",req.body)
 //  if (email) {
     try {

@@ -19,7 +19,7 @@ app.use(cors({
     origin: allowedOrigin,
     credentials: true,
 }));
-app.use(cookieParser)
+app.use(cookieParser())
 
 
 // Swagger setup
