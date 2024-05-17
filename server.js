@@ -8,13 +8,18 @@ const config = require('./app/config/index').get(process.env.NODE_ENV)
 const app = express();
 const swaggerDocument = require('./public/swagger.json');
 require('./app/db');
+const cookieParser =require('cookie-parser')
 
 const users = {
     "user1": "otp1",
     "user2": "otp2",
 };
-
-app.use(cors())
+const allowedOrigin = 'http://localhost:5173';
+app.use(cors({
+    origin: allowedOrigin,
+    credentials: true,
+}));
+app.use(cookieParser)
 
 
 // Swagger setup

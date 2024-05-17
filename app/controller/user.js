@@ -1,10 +1,9 @@
-const Users = require("../models/user");
+// const Users = require("../models/user");
 const { sendOTP } = require('./sendOTP');
 const nodemailer = require('nodemailer')
-const jwt = require('jsonwebtoken');
+
 
 let predefinedLabels = ['L1', 'L2', 'L3'];
-const secretKey = 'eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTcxNTc2NjExNCwiaWF0IjoxNzE1NzY2MTE0fQ.x_4EmzrgS8xjoWQYGK9l5EXP0FM5zwEZZHlmedW4itA';
 
 
 const transporter = nodemailer.createTransport({
@@ -36,20 +35,59 @@ const transporter = nodemailer.createTransport({
 */
 
 
-module.exports.login = async (req, res) => {
-  // { username } = req.body;
+// module.exports.login = async (req, res) => {
+//   // { username } = req.body;
 
-  /*if (!username) {
+//   /*if (!username) {
+//     return res.status(400).json({ success: false, message: 'Please provide a username' });
+//   }*/
+//   username = 'akshay';
+
+//   try {
+//     const user = await Users.findOne({ username });
+
+//     if (user) {
+//       const token = jwt.sign({ username: user.username }, secretKey, { expiresIn: '1h' });
+//       res.cookie('authToken', token, { httpOnly: true, secure: true,sameSite: 'none' }); 
+
+//       return res.status(200).json({ success: true, message: 'Login successful', exists: true });
+//     } else {
+//       return res.status(400).json({ success: false, message: 'User not found', exists: false });
+//     }
+//   } catch (error) {
+//     console.error('Error finding user:', error);
+//     return res.status(500).json({ success: false, message: 'Error finding user' });
+//   }
+// }
+
+const jwt = require('jsonwebtoken');
+const Users = require("../models/user"); // Import the Users model
+const secretKey = 'eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTcxNTc2NjExNCwiaWF0IjoxNzE1NzY2MTE0fQ.x_4EmzrgS8xjoWQYGK9l5EXP0FM5zwEZZHlmedW4itA'; // Make sure this key matches the one in auth.js
+username = 'akshay';
+
+module.exports.login = async (req, res) => {
+
+  res.cookie('myCookie','cookieValue',{
+    sameSite:'none',
+    secure: false,
+    httpOnly: true,
+    maxAge: 1000*60*60*24,
+    path:'/',
+  });
+  return res.send('Cookie is set');
+
+  const { username } = req.body; // Uncommented this line to get username from request body
+
+  if (!username) {
     return res.status(400).json({ success: false, message: 'Please provide a username' });
-  }*/
-  username = 'akshay';
+  }
 
   try {
     const user = await Users.findOne({ username });
 
     if (user) {
       const token = jwt.sign({ username: user.username }, secretKey, { expiresIn: '1h' });
-      res.cookie('authToken', token, { httpOnly: true, secure: true, sameSite: 'none'  }); 
+      res.cookie('authToken', token, { httpOnly: true, secure: true, sameSite: 'none' });
 
       return res.status(200).json({ success: true, message: 'Login successful', exists: true });
     } else {
@@ -59,28 +97,10 @@ module.exports.login = async (req, res) => {
     console.error('Error finding user:', error);
     return res.status(500).json({ success: false, message: 'Error finding user' });
   }
-}
+};
 
 
-// username = 'akshay'; // Assuming 'username' is defined elsewhere
 
-// try {
-//   const user = await Users.findOne({ username });
-
-//   if (user) {
-//     const token = jwt.sign({ username: user.username }, secretKey, { expiresIn: '1h' });
-    
-//     // Set the cookie with appropriate options
-//     res.cookie('authToken', token, { httpOnly: true, secure: true, sameSite: 'none' }); // Assuming you need to set SameSite to 'none' for cross-site requests
-
-//     return res.status(200).json({ success: true, message: 'Login successful', exists: true });
-//   } else {
-//     return res.status(400).json({ success: false, message: 'User not found', exists: false });
-//   }
-// } catch (error) {
-//   console.error('Error finding user:', error);
-//   return res.status(500).json({ success: false, message: 'Error finding user' });
-// }
 module.exports.requestOtp = async (req, res) => {
   const { email } = req.body;
   console.log("request body",req.body)
