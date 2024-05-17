@@ -44,12 +44,12 @@ module.exports.login = async (req, res) => {
   }*/
   username = 'akshay';
 
-  /*try {
+  try {
     const user = await Users.findOne({ username });
 
     if (user) {
       const token = jwt.sign({ username: user.username }, secretKey, { expiresIn: '1h' });
-      res.cookie('authToken', token, { httpOnly: true, secure: true }); 
+      res.cookie('authToken', token, { httpOnly: true, secure: true, sameSite: 'none'  }); 
 
       return res.status(200).json({ success: true, message: 'Login successful', exists: true });
     } else {
@@ -59,28 +59,28 @@ module.exports.login = async (req, res) => {
     console.error('Error finding user:', error);
     return res.status(500).json({ success: false, message: 'Error finding user' });
   }
-}*/
-
-
-username = 'akshay'; // Assuming 'username' is defined elsewhere
-
-try {
-  const user = await Users.findOne({ username });
-
-  if (user) {
-    const token = jwt.sign({ username: user.username }, secretKey, { expiresIn: '1h' });
-    
-    // Set the cookie with appropriate options
-    res.cookie('authToken', token, { httpOnly: true, secure: true, sameSite: 'none' }); // Assuming you need to set SameSite to 'none' for cross-site requests
-
-    return res.status(200).json({ success: true, message: 'Login successful', exists: true });
-  } else {
-    return res.status(400).json({ success: false, message: 'User not found', exists: false });
-  }
-} catch (error) {
-  console.error('Error finding user:', error);
-  return res.status(500).json({ success: false, message: 'Error finding user' });
 }
+
+
+// username = 'akshay'; // Assuming 'username' is defined elsewhere
+
+// try {
+//   const user = await Users.findOne({ username });
+
+//   if (user) {
+//     const token = jwt.sign({ username: user.username }, secretKey, { expiresIn: '1h' });
+    
+//     // Set the cookie with appropriate options
+//     res.cookie('authToken', token, { httpOnly: true, secure: true, sameSite: 'none' }); // Assuming you need to set SameSite to 'none' for cross-site requests
+
+//     return res.status(200).json({ success: true, message: 'Login successful', exists: true });
+//   } else {
+//     return res.status(400).json({ success: false, message: 'User not found', exists: false });
+//   }
+// } catch (error) {
+//   console.error('Error finding user:', error);
+//   return res.status(500).json({ success: false, message: 'Error finding user' });
+// }
 module.exports.requestOtp = async (req, res) => {
   const { email } = req.body;
   console.log("request body",req.body)
