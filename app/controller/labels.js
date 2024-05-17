@@ -3,6 +3,8 @@ const Labels = require('../models/labels');
 const { labels } = require('./user');
 
 module.exports.get = async (req, res, next) => {
+    console.log("11", req.cookies)
+    console.log("22", req.headers)
     let labels = await Labels.find().select({
         _id: 0,
         name: 1
