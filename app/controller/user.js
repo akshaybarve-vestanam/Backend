@@ -144,16 +144,16 @@ module.exports.requestOtp = async (req, res) => {
 
 module.exports.signup = async (req, res) => {
   console.log(req.body);
-  const { name, username, email, contact, address, query } = req.body;
+  const { name, email, phoneNumber, address, query } = req.body;
 
-  if (!name || !username || !email || !contact || !address || !query) {
+  if (!name || !email || !phoneNumber || !address || !query) {
 
     return res.json({ s: false, d: 'Please fill in all the details' });
 
   }
 
   try {
-    await Users.create({ name, username, email, contact, address, query });
+    let user1 = await Users.create({ name, email, phoneNumber, address, query });
     res.json({ s: true, d: 'User registered successfully' });
   } catch (error) {
     console.error('Error creating user:', error);

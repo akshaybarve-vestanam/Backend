@@ -14,11 +14,10 @@ const Users = new Schema({
   },
   username:{
       type:String,
-      required: [true, "Username is missing"],
       unique:true,
       trim:true
   },
-  contact: {
+  phoneNumber: {
     type: Number,
     minlength: 10,
     maxlength: 10,
