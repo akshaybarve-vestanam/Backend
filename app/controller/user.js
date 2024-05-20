@@ -174,7 +174,7 @@ module.exports.requestOtp = async (req, res) => {
   }*//*
 }
 */
-
+/* 
 const generateOtp = () => Math.floor(100000 + Math.random() * 900000);
 module.exports.requestOtp = async (req, res) => {
   const { email } = req.body;
@@ -213,6 +213,79 @@ module.exports.requestOtp = async (req, res) => {
   } catch (error) {
     console.error('Error processing request:', error);
     return res.json({ s: false, m: "Error processing request" });
+  }
+};*/
+
+const otpStore = {};
+const generateOtp = () => Math.floor(100000 + Math.random() * 900000);
+
+module.exports.requestOtp = async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.json({ s: false, m: "Please enter email id" });
+  }
+
+  try {
+    const user = await Users.findOne({ email });
+
+    if (!user) {
+      console.log('ALERT: Email not registered:', email);
+      return res.json({ s: false, m: "ALERT: Email not registered. Please sign up first." });
+    }
+
+    const otp = generateOtp();
+    const otpExpiry = Date.now() + 15 * 60 * 1000; // OTP is valid for 15 minutes
+
+    otpStore[email] = { otp, otpExpiry };
+
+    var mailOptions = {
+      from: '"Introspects No-reply" <donotreply@introspects.in>', // sender address
+      to: email, // list of receivers
+      subject: 'Introspects OTP ' + otp, // Subject line
+      html: `OTP for login is <b>${otp}</b> valid for 15 minutes`,
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log('Error sending email:', error);
+        return res.json({ s: false, m: "Error sending OTP" });
+      }
+      console.log('Message sent: ' + info.response);
+      return res.json({ s: true, m: "OTP sent" });
+    });
+
+  } catch (error) {
+    console.error('Error processing request:', error);
+    return res.json({ s: false, m: "Error processing request" });
+  }
+};
+
+module.exports.verifyOtp = (req, res) => {
+  const { email, otp } = req.body;
+
+  if (!email || !otp) {
+    return res.json({ s: false, m: "Please provide email and OTP" });
+  }
+
+  const storedOtpData = otpStore[email];
+
+  if (!storedOtpData) {
+    return res.json({ s: false, m: "OTP not found or expired" });
+  }
+
+  const { otp: storedOtp, otpExpiry } = storedOtpData;
+
+  if (Date.now() > otpExpiry) {
+    delete otpStore[email]; // Clean up expired OTP
+    return res.json({ s: false, m: "OTP expired" });
+  }
+
+  if (otp === storedOtp) {
+    delete otpStore[email]; // Clean up used OTP
+    return res.json({ s: true, m: "OTP verified" });
+  } else {
+    return res.json({ s: false, m: "Invalid OTP" });
   }
 };
 
