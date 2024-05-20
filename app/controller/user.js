@@ -1,21 +1,18 @@
 // const Users = require("../models/user");
-const { sendOTP } = require('./sendOTP');
-const nodemailer = require('nodemailer')
+const { sendOTP } = require("./sendOTP");
+const nodemailer = require("nodemailer");
 
-
-let predefinedLabels = ['L1', 'L2', 'L3'];
-
+let predefinedLabels = ["L1", "L2", "L3"];
 
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  service: "gmail",
   // port: 465,
   // secure: true, // use SSL
   auth: {
-    user: 'donotreply@introspects.in',
-    pass: 'cmzoiodhrihbafmu'
-  }
+    user: "donotreply@introspects.in",
+    pass: "cmzoiodhrihbafmu",
+  },
 });
-
 
 /*module.exports.sendOTP = async (req, res) => {
   const { email } = req.body;
@@ -34,7 +31,6 @@ const transporter = nodemailer.createTransport({
 }
 */
 
-
 // module.exports.login = async (req, res) => {
 //   // { username } = req.body;
 
@@ -48,7 +44,7 @@ const transporter = nodemailer.createTransport({
 
 //     if (user) {
 //       const token = jwt.sign({ username: user.username }, secretKey, { expiresIn: '1h' });
-//       res.cookie('authToken', token, { httpOnly: true, secure: true,sameSite: 'none' }); 
+//       res.cookie('authToken', token, { httpOnly: true, secure: true,sameSite: 'none' });
 
 //       return res.status(200).json({ success: true, message: 'Login successful', exists: true });
 //     } else {
@@ -60,10 +56,11 @@ const transporter = nodemailer.createTransport({
 //   }
 // }
 
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 const Users = require("../models/user"); // Import the Users model
-const secretKey = 'eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTcxNTc2NjExNCwiaWF0IjoxNzE1NzY2MTE0fQ.x_4EmzrgS8xjoWQYGK9l5EXP0FM5zwEZZHlmedW4itA'; // Make sure this key matches the one in auth.js
-username = 'akshay';
+const secretKey =
+  "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTcxNTc2NjExNCwiaWF0IjoxNzE1NzY2MTE0fQ.x_4EmzrgS8xjoWQYGK9l5EXP0FM5zwEZZHlmedW4itA"; // Make sure this key matches the one in auth.js
+username = "akshay";
 /*
 module.exports.login = async (req, res) => {
 
@@ -105,29 +102,38 @@ module.exports.login = async (req, res) => {
     const { email } = req.body;
 
     if (!email) {
-      return res.status(400).json({ success: false, message: 'Please provide a username' });
+      return res
+        .status(400)
+        .json({ success: false, message: "Please provide a username" });
     }
 
     const user = await Users.findOne({ email });
 
     if (!user) {
-      return res.status(400).json({ success: false, message: 'User not found', exists: false });
+      return res
+        .status(400)
+        .json({ success: false, message: "User not found", exists: false });
     }
 
-    const token = jwt.sign({ email: user.email }, secretKey, { expiresIn: '1h' });
-
-    res.cookie('authToken', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'none',
-      maxAge: 1000 * 60 * 60 * 24,
-      path: '/',
+    const token = jwt.sign({ email: user.email }, secretKey, {
+      expiresIn: "1h",
     });
 
-    return res.status(200).json({ success: true, message: 'Login successful', exists: true });
+    res.cookie("authToken", token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "none",
+      maxAge: 1000 * 60 * 60 * 24,
+      path: "/",
+      redirectURL: "/dashboard/registration/bulk",
+    });
+
+    return res
+      .status(200)
+      .json({ success: true, message: "Login successful", exists: true });
   } catch (error) {
-    console.error('Error processing login:', error);
-    return res.status(500).json({ success: false, message: 'Server error' });
+    console.error("Error processing login:", error);
+    return res.status(500).json({ success: false, message: "Server error" });
   }
 };
 
@@ -159,17 +165,17 @@ module.exports.requestOtp = async (req, res) => {
       }
       console.log('Message sent: ' + info.response);
      
-    })*//*
-return res.json({ s: true, m: "OTP sent" })
-} 
-catch (error) {
-console.error('Error checking email:', error);
-return res.json({ s: false, m: "Error processing request" });
-}
-/*}
-else {
-return res.json({ s: false, m: "Please enter email id" })
-}*//*
+    })*/ /*
+    return res.json({ s: true, m: "OTP sent" })
+  } 
+    catch (error) {
+    console.error('Error checking email:', error);
+    return res.json({ s: false, m: "Error processing request" });
+    }
+  /*}
+  else {
+    return res.json({ s: false, m: "Please enter email id" })
+  }*/ /*
 }
 */
 /* 
@@ -185,7 +191,8 @@ module.exports.requestOtp = async (req, res) => {
     const user = await Users.findOne({ email });
 
     if (!user) {
-      return res.json({ s: false, m: "Email not registered. Please sign up first." });
+      console.log('ALERT: Email not registered:', email); 
+      return res.json({ s: false, m: "ALERT: Email not registered. Please sign up first." });
     }
 
     const otp = generateOtp();
@@ -197,19 +204,15 @@ module.exports.requestOtp = async (req, res) => {
       html: `OTP for login is <b>${otp}</b> valid for 15 minutes`
     };
 
-    if (process.env.NODE_ENV == "production") {
-      transporter.sendMail(mailOptions, function (error, info) {
-        if (error) {
-          console.log('Error sending email:', error);
-          return res.json({ s: false, m: "Error sending OTP" });
-        }
-        console.log('Message sent: ' + info.response);
-        return res.json({ s: true, m: "OTP sent", d: {} });
-      });
-    } else {
-      console.log(otp)
-      return res.json({ s: true, m: "OTP sent", d: {} });
-    }
+    // Send mail with defined transport object
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log('Error sending email:', error);
+        return res.json({ s: false, m: "Error sending OTP" });
+      }
+      console.log('Message sent: ' + info.response);
+      return res.json({ s: true, m: "OTP sent" });
+    });
 
   } catch (error) {
     console.error('Error processing request:', error);
@@ -231,33 +234,40 @@ module.exports.requestOtp = async (req, res) => {
     const user = await Users.findOne({ email });
 
     if (!user) {
-      console.log('ALERT: Email not registered:', email);
-      return res.json({ s: false, m: "ALERT: Email not registered. Please sign up first." });
+      console.log("ALERT: Email not registered:", email);
+      return res.json({
+        s: false,
+        m: "ALERT: Email not registered. Please sign up first.",
+      });
     }
 
     const otp = generateOtp();
     const otpExpiry = Date.now() + 15 * 60 * 1000; // OTP is valid for 15 minutes
 
+    // Store OTP in memory (or your choice of storage)
     otpStore[email] = { otp, otpExpiry };
 
     var mailOptions = {
       from: '"Introspects No-reply" <donotreply@introspects.in>', // sender address
       to: email, // list of receivers
-      subject: 'Introspects OTP ' + otp, // Subject line
+      subject: "Introspects OTP " + otp, // Subject line
       html: `OTP for login is <b>${otp}</b> valid for 15 minutes`,
     };
-
-    transporter.sendMail(mailOptions, function (error, info) {
-      if (error) {
-        console.log('Error sending email:', error);
-        return res.json({ s: false, m: "Error sending OTP" });
-      }
-      console.log('Message sent: ' + info.response);
+    if (process.env.NODE_ENV === "production") {
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          console.log("Error sending email:", error);
+          return res.json({ s: false, m: "Error sending OTP" });
+        }
+        console.log("Message sent: " + info.response);
+        return res.json({ s: true, m: "OTP sent" });
+      });
+    } else {
+      console.log(otp);
       return res.json({ s: true, m: "OTP sent" });
-    });
-
+    }
   } catch (error) {
-    console.error('Error processing request:', error);
+    console.error("Error processing request:", error);
     return res.json({ s: false, m: "Error processing request" });
   }
 };
@@ -290,32 +300,36 @@ module.exports.verifyOtp = (req, res) => {
   }
 };
 
-
 module.exports.signup = async (req, res) => {
   console.log(req.body);
   const { name, email, phoneNumber, address, query } = req.body;
 
   if (!name || !email || !phoneNumber || !address || !query) {
-
-    return res.json({ s: false, d: 'Please fill in all the details' });
-
+    return res.json({ s: false, d: "Please fill in all the details" });
   }
 
   try {
-    let user1 = await Users.create({ name, email, phoneNumber, address, query });
-    res.json({ s: true, d: 'User registered successfully' });
+    let user1 = await Users.create({
+      name,
+      email,
+      phoneNumber,
+      address,
+      query,
+    });
+    res.json({ s: true, d: "User registered successfully" });
   } catch (error) {
-    console.error('Error creating user:', error);
-    res.json({ s: false, d: 'Error registering user' });
+    console.error("Error creating user:", error);
+    res.json({ s: false, d: "Error registering user" });
   }
-}
-
+};
 
 module.exports.labels = (req, res) => {
   const { label } = req.body;
   if (!label || predefinedLabels.includes(label)) {
-    return res.status(400).json({ message: 'Label already exists or is not provided' });
+    return res
+      .status(400)
+      .json({ message: "Label already exists or is not provided" });
   }
   predefinedLabels.push(label);
-  res.status(200).json({ message: 'Label created successfully', label });
-}
+  res.status(200).json({ message: "Label created successfully", label });
+};
