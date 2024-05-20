@@ -102,8 +102,7 @@ module.exports.login = async (req, res) => {
 
 module.exports.login = async (req, res) => {
   try {
-    const { email } = req.body; 
-    
+    const { email } = req.body;
 
     if (!email) {
       return res.status(400).json({ success: false, message: 'Please provide a username' });
@@ -119,11 +118,10 @@ module.exports.login = async (req, res) => {
 
     res.cookie('authToken', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', 
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'none',
-      maxAge: 1000 * 60 * 60 * 24, 
+      maxAge: 1000 * 60 * 60 * 24,
       path: '/',
-      redirectURL : '/dashboard/registration/bulk',
     });
 
     return res.status(200).json({ success: true, message: 'Login successful', exists: true });
@@ -162,16 +160,16 @@ module.exports.requestOtp = async (req, res) => {
       console.log('Message sent: ' + info.response);
      
     })*//*
-    return res.json({ s: true, m: "OTP sent" })
-  } 
-    catch (error) {
-    console.error('Error checking email:', error);
-    return res.json({ s: false, m: "Error processing request" });
-    }
-  /*}
-  else {
-    return res.json({ s: false, m: "Please enter email id" })
-  }*//*
+return res.json({ s: true, m: "OTP sent" })
+} 
+catch (error) {
+console.error('Error checking email:', error);
+return res.json({ s: false, m: "Error processing request" });
+}
+/*}
+else {
+return res.json({ s: false, m: "Please enter email id" })
+}*//*
 }
 */
 /* 
@@ -187,8 +185,7 @@ module.exports.requestOtp = async (req, res) => {
     const user = await Users.findOne({ email });
 
     if (!user) {
-      console.log('ALERT: Email not registered:', email); 
-      return res.json({ s: false, m: "ALERT: Email not registered. Please sign up first." });
+      return res.json({ s: false, m: "Email not registered. Please sign up first." });
     }
 
     const otp = generateOtp();
@@ -200,15 +197,19 @@ module.exports.requestOtp = async (req, res) => {
       html: `OTP for login is <b>${otp}</b> valid for 15 minutes`
     };
 
-    // Send mail with defined transport object
-    transporter.sendMail(mailOptions, function (error, info) {
-      if (error) {
-        console.log('Error sending email:', error);
-        return res.json({ s: false, m: "Error sending OTP" });
-      }
-      console.log('Message sent: ' + info.response);
-      return res.json({ s: true, m: "OTP sent" });
-    });
+    if (process.env.NODE_ENV == "production") {
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          console.log('Error sending email:', error);
+          return res.json({ s: false, m: "Error sending OTP" });
+        }
+        console.log('Message sent: ' + info.response);
+        return res.json({ s: true, m: "OTP sent", d: {} });
+      });
+    } else {
+      console.log(otp)
+      return res.json({ s: true, m: "OTP sent", d: {} });
+    }
 
   } catch (error) {
     console.error('Error processing request:', error);
