@@ -18,15 +18,15 @@ const transporter = nodemailer.createTransport({
   const { email } = req.body;
 
   if (!email) {
-    return res.status(400).json({ message: 'Email is required' });
+    return res.status(400).json({ m: 'Email is required' });
   }
 
   try {
     const otp = await sendOTP(email); // Send OTP via email
-    res.status(200).json({ message: 'OTP sent successfully', otp });
+    res.status(200).json({ m: 'OTP sent successfully', otp });
   } catch (error) {
     console.error('Error sending OTP:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ m: 'Internal server error' });
   }
 }
 */
@@ -35,7 +35,7 @@ const transporter = nodemailer.createTransport({
 //   // { username } = req.body;
 
 //   /*if (!username) {
-//     return res.status(400).json({ success: false, message: 'Please provide a username' });
+//     return res.status(400).json({ s:false, m: 'Please provide a username' });
 //   }*/
 //   username = 'akshay';
 
@@ -46,13 +46,13 @@ const transporter = nodemailer.createTransport({
 //       const token = jwt.sign({ username: user.username }, secretKey, { expiresIn: '1h' });
 //       res.cookie('authToken', token, { httpOnly: true, secure: true,sameSite: 'none' });
 
-//       return res.status(200).json({ success: true, message: 'Login successful', exists: true });
+//       return res.status(200).json({ s:true, m: 'Login successful', exists: true });
 //     } else {
-//       return res.status(400).json({ success: false, message: 'User not found', exists: false });
+//       return res.status(400).json({ s:false, m: 'User not found', exists: false });
 //     }
 //   } catch (error) {
 //     console.error('Error finding user:', error);
-//     return res.status(500).json({ success: false, message: 'Error finding user' });
+//     return res.status(500).json({ s:false, m: 'Error finding user' });
 //   }
 // }
 
@@ -61,166 +61,53 @@ const Users = require("../models/user"); // Import the Users model
 const secretKey =
   "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTcxNTc2NjExNCwiaWF0IjoxNzE1NzY2MTE0fQ.x_4EmzrgS8xjoWQYGK9l5EXP0FM5zwEZZHlmedW4itA"; // Make sure this key matches the one in auth.js
 username = "akshay";
-/*
-module.exports.login = async (req, res) => {
-
-  res.cookie('myCookie','cookieValue',{
-    sameSite:'none',
-    secure: false,
-    httpOnly: true,
-    maxAge: 1000*60*60*24,
-    path:'/',
-  });
-  return res.send('Cookie is set');
-
-  const { username } = req.body; // Uncommented this line to get username from request body
-
-  if (!username) {
-    return res.status(400).json({ success: false, message: 'Please provide a username' });
-  }
-
-  try {
-    const user = await Users.findOne({ username });
-
-    if (user) {
-      const token = jwt.sign({ username: user.username }, secretKey, { expiresIn: '1h' });
-      res.cookie('authToken', token, { httpOnly: true, secure: true, sameSite: 'none' });
-
-      return res.status(200).json({ success: true, message: 'Login successful', exists: true });
-    } else {
-      return res.status(400).json({ success: false, message: 'User not found', exists: false });
-    }
-  } catch (error) {
-    console.error('Error finding user:', error);
-    return res.status(500).json({ success: false, message: 'Error finding user' });
-  }
-};
-*/
 
 module.exports.login = async (req, res) => {
   try {
-    const { email } = req.body;
+    const { email, otp } = req.body;
 
     if (!email) {
       return res
         .status(400)
-        .json({ success: false, message: "Please provide a username" });
+        .json({ s:false, m: "Please provide a username", d: {} });
     }
 
     const user = await Users.findOne({ email });
-
     if (!user) {
       return res
         .status(400)
-        .json({ success: false, message: "User not found", exists: false });
+        .json({ s:false, m: "User not found", d: {} });
     }
 
-    const token = jwt.sign({ email: user.email }, secretKey, {
-      expiresIn: "1h",
-    });
+    if (user && user.otp.val == otp) {
+      const token = jwt.sign({ email: user.email }, secretKey, {
+        expiresIn: "1h",
+      });
 
-    res.cookie("authToken", token, {
-      httpOnly: true,
-      secure: false,
-      sameSite: "none",
-      maxAge: 1000 * 60 * 60 * 24,
-      path: "/",
-      redirectURL: "/dashboard/registration/bulk",
-    });
+      res.cookie("authToken", token, {
+        httpOnly: true,
+        secure: false,
+        sameSite: "none",
+        maxAge: 1000 * 60 * 60 * 24,
+        path: "/",
+        redirectURL: "/dashboard/registration/bulk",
+      });
 
-    return res
-      .status(200)
-      .json({ success: true, message: "Login successful", exists: true });
+      return res
+        .status(200)
+        .json({ s:true, m: "Login successful", d: {} });
+    }else {
+      return res
+        .status(200)
+        .json({ s:false, m: "Invalid OTP", d: {} });
+    }
   } catch (error) {
     console.error("Error processing login:", error);
-    return res.status(500).json({ success: false, message: "Server error" });
+    return res.status(500).json({ s:false, m: "Server error" });
   }
 };
 
-/*
-module.exports.requestOtp = async (req, res) => {
-  const { email } = req.body;
-  return res.json({ s: true, m: "OTP sent" })
-  console.log("request body",req.body)
-//  if (email) {
-    try {
-      // Check if the email is registered
-      const user = await Users.findOne({ email });
-      console.log(user);
-      if (!user) {
-        return res.json({ s: false, m: "Email not registered" });
-      }
-    var mailOptions = {
-      from: '"Introspects No-reply" <donotreply@introspects.in>', // sender address (who sends)
-      to: email, // list of receivers (who receives)
-      subject: 'Introspects OTP ' + 11111, // Subject line
-      // text: 'Hello world ', // plaintext body
-      html: 'OTP for login is <b> ' + 11111 + ' </b> valid for 15 minutes' + `</b><br><br><br>This is a system generated mail - please do not reply to this message.<br><br><br>This message contains information that may be privileged or confidential and is the property of the Introspects. It is intended only for the person to whom it is addressed. If you are not the intended recipient, you are not authorized to read, print, retain copy, disseminate, distribute, or use this message or any part thereof. If you receive this message in error, please notify the sender immediately and delete all copies of this message. Introspects does not accept any liability for virus infected mails.`// html body
-    };
 
-    // send mail with defined transport object
-   /* transporter.sendMail(mailOptions, function (error, info) {
-      if (error) {
-        console.log(error);
-      }
-      console.log('Message sent: ' + info.response);
-     
-    })*/ /*
-    return res.json({ s: true, m: "OTP sent" })
-  } 
-    catch (error) {
-    console.error('Error checking email:', error);
-    return res.json({ s: false, m: "Error processing request" });
-    }
-  /*}
-  else {
-    return res.json({ s: false, m: "Please enter email id" })
-  }*/ /*
-}
-*/
-/* 
-const generateOtp = () => Math.floor(100000 + Math.random() * 900000);
-module.exports.requestOtp = async (req, res) => {
-  const { email } = req.body;
-
-  if (!email) {
-    return res.json({ s: false, m: "Please enter email id" });
-  }
-
-  try {
-    const user = await Users.findOne({ email });
-
-    if (!user) {
-      console.log('ALERT: Email not registered:', email); 
-      return res.json({ s: false, m: "ALERT: Email not registered. Please sign up first." });
-    }
-
-    const otp = generateOtp();
-
-    var mailOptions = {
-      from: '"Introspects No-reply" <donotreply@introspects.in>', // sender address
-      to: email, // list of receivers
-      subject: 'Introspects OTP ' + otp, // Subject line
-      html: `OTP for login is <b>${otp}</b> valid for 15 minutes`
-    };
-
-    // Send mail with defined transport object
-    transporter.sendMail(mailOptions, function (error, info) {
-      if (error) {
-        console.log('Error sending email:', error);
-        return res.json({ s: false, m: "Error sending OTP" });
-      }
-      console.log('Message sent: ' + info.response);
-      return res.json({ s: true, m: "OTP sent" });
-    });
-
-  } catch (error) {
-    console.error('Error processing request:', error);
-    return res.json({ s: false, m: "Error processing request" });
-  }
-};*/
-
-const otpStore = {};
 const generateOtp = () => Math.floor(100000 + Math.random() * 900000);
 
 module.exports.requestOtp = async (req, res) => {
@@ -234,10 +121,10 @@ module.exports.requestOtp = async (req, res) => {
     const user = await Users.findOne({ email });
 
     if (!user) {
-      console.log("ALERT: Email not registered:", email);
+      console.log("Email not registered:", email);
       return res.json({
         s: false,
-        m: "ALERT: Email not registered. Please sign up first.",
+        m: "Email not registered. Please sign up first.",
       });
     }
 
@@ -245,8 +132,11 @@ module.exports.requestOtp = async (req, res) => {
     const otpExpiry = Date.now() + 15 * 60 * 1000; // OTP is valid for 15 minutes
 
     // Store OTP in memory (or your choice of storage)
-    otpStore[email] = { otp, otpExpiry };
-
+    user.otp = {
+      val: otp,
+      expiresIn: otpExpiry
+    }
+    let u = await user.save()
     var mailOptions = {
       from: '"Introspects No-reply" <donotreply@introspects.in>', // sender address
       to: email, // list of receivers
@@ -269,34 +159,6 @@ module.exports.requestOtp = async (req, res) => {
   } catch (error) {
     console.error("Error processing request:", error);
     return res.json({ s: false, m: "Error processing request" });
-  }
-};
-
-module.exports.verifyOtp = (req, res) => {
-  const { email, otp } = req.body;
-
-  if (!email || !otp) {
-    return res.json({ s: false, m: "Please provide email and OTP" });
-  }
-
-  const storedOtpData = otpStore[email];
-
-  if (!storedOtpData) {
-    return res.json({ s: false, m: "OTP not found or expired" });
-  }
-
-  const { otp: storedOtp, otpExpiry } = storedOtpData;
-
-  if (Date.now() > otpExpiry) {
-    delete otpStore[email]; // Clean up expired OTP
-    return res.json({ s: false, m: "OTP expired" });
-  }
-
-  if (otp === storedOtp) {
-    delete otpStore[email]; // Clean up used OTP
-    return res.json({ s: true, m: "OTP verified" });
-  } else {
-    return res.json({ s: false, m: "Invalid OTP" });
   }
 };
 
@@ -328,8 +190,8 @@ module.exports.labels = (req, res) => {
   if (!label || predefinedLabels.includes(label)) {
     return res
       .status(400)
-      .json({ message: "Label already exists or is not provided" });
+      .json({ m: "Label already exists or is not provided" });
   }
   predefinedLabels.push(label);
-  res.status(200).json({ message: "Label created successfully", label });
+  res.status(200).json({ m: "Label created successfully", label });
 };
