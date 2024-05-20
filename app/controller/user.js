@@ -64,7 +64,7 @@ const jwt = require('jsonwebtoken');
 const Users = require("../models/user"); // Import the Users model
 const secretKey = 'eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTcxNTc2NjExNCwiaWF0IjoxNzE1NzY2MTE0fQ.x_4EmzrgS8xjoWQYGK9l5EXP0FM5zwEZZHlmedW4itA'; // Make sure this key matches the one in auth.js
 username = 'akshay';
-
+/*
 module.exports.login = async (req, res) => {
 
   res.cookie('myCookie','cookieValue',{
@@ -98,9 +98,42 @@ module.exports.login = async (req, res) => {
     return res.status(500).json({ success: false, message: 'Error finding user' });
   }
 };
+*/
 
+module.exports.login = async (req, res) => {
+  try {
+    const { email } = req.body; 
+    
 
+    if (!email) {
+      return res.status(400).json({ success: false, message: 'Please provide a username' });
+    }
 
+    const user = await Users.findOne({ email });
+
+    if (!user) {
+      return res.status(400).json({ success: false, message: 'User not found', exists: false });
+    }
+
+    const token = jwt.sign({ email: user.email }, secretKey, { expiresIn: '1h' });
+
+    res.cookie('authToken', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', 
+      sameSite: 'none',
+      maxAge: 1000 * 60 * 60 * 24, 
+      path: '/',
+      redirectURL : '/dashboard/registration/bulk',
+    });
+
+    return res.status(200).json({ success: true, message: 'Login successful', exists: true });
+  } catch (error) {
+    console.error('Error processing login:', error);
+    return res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
+/*
 module.exports.requestOtp = async (req, res) => {
   const { email } = req.body;
   return res.json({ s: true, m: "OTP sent" })
@@ -128,7 +161,7 @@ module.exports.requestOtp = async (req, res) => {
       }
       console.log('Message sent: ' + info.response);
      
-    })*/
+    })*//*
     return res.json({ s: true, m: "OTP sent" })
   } 
     catch (error) {
@@ -138,8 +171,50 @@ module.exports.requestOtp = async (req, res) => {
   /*}
   else {
     return res.json({ s: false, m: "Please enter email id" })
-  }*/
+  }*//*
 }
+*/
+
+const generateOtp = () => Math.floor(100000 + Math.random() * 900000);
+module.exports.requestOtp = async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.json({ s: false, m: "Please enter email id" });
+  }
+
+  try {
+    const user = await Users.findOne({ email });
+
+    if (!user) {
+      console.log('ALERT: Email not registered:', email); 
+      return res.json({ s: false, m: "ALERT: Email not registered. Please sign up first." });
+    }
+
+    const otp = generateOtp();
+
+    var mailOptions = {
+      from: '"Introspects No-reply" <donotreply@introspects.in>', // sender address
+      to: email, // list of receivers
+      subject: 'Introspects OTP ' + otp, // Subject line
+      html: `OTP for login is <b>${otp}</b> valid for 15 minutes`
+    };
+
+    // Send mail with defined transport object
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log('Error sending email:', error);
+        return res.json({ s: false, m: "Error sending OTP" });
+      }
+      console.log('Message sent: ' + info.response);
+      return res.json({ s: true, m: "OTP sent" });
+    });
+
+  } catch (error) {
+    console.error('Error processing request:', error);
+    return res.json({ s: false, m: "Error processing request" });
+  }
+};
 
 
 module.exports.signup = async (req, res) => {
