@@ -1,6 +1,11 @@
 // const Users = require("../models/user");
 const { sendOTP } = require("./sendOTP");
 const nodemailer = require("nodemailer");
+const jwt = require("jsonwebtoken");
+
+const Users = require("../models/user"); // Import the Users model
+const Config = require("../config").get(process.env.NODE_ENV);
+
 
 let predefinedLabels = ["L1", "L2", "L3"];
 
@@ -13,54 +18,6 @@ const transporter = nodemailer.createTransport({
     pass: "cmzoiodhrihbafmu",
   },
 });
-
-/*module.exports.sendOTP = async (req, res) => {
-  const { email } = req.body;
-
-  if (!email) {
-    return res.status(400).json({ m: 'Email is required' });
-  }
-
-  try {
-    const otp = await sendOTP(email); // Send OTP via email
-    res.status(200).json({ m: 'OTP sent successfully', otp });
-  } catch (error) {
-    console.error('Error sending OTP:', error);
-    res.status(500).json({ m: 'Internal server error' });
-  }
-}
-*/
-
-// module.exports.login = async (req, res) => {
-//   // { username } = req.body;
-
-//   /*if (!username) {
-//     return res.status(400).json({ s:false, m: 'Please provide a username' });
-//   }*/
-//   username = 'akshay';
-
-//   try {
-//     const user = await Users.findOne({ username });
-
-//     if (user) {
-//       const token = jwt.sign({ username: user.username }, secretKey, { expiresIn: '1h' });
-//       res.cookie('authToken', token, { httpOnly: true, secure: true,sameSite: 'none' });
-
-//       return res.status(200).json({ s:true, m: 'Login successful', exists: true });
-//     } else {
-//       return res.status(400).json({ s:false, m: 'User not found', exists: false });
-//     }
-//   } catch (error) {
-//     console.error('Error finding user:', error);
-//     return res.status(500).json({ s:false, m: 'Error finding user' });
-//   }
-// }
-
-const jwt = require("jsonwebtoken");
-const Users = require("../models/user"); // Import the Users model
-const secretKey =
-  "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTcxNTc2NjExNCwiaWF0IjoxNzE1NzY2MTE0fQ.x_4EmzrgS8xjoWQYGK9l5EXP0FM5zwEZZHlmedW4itA"; // Make sure this key matches the one in auth.js
-username = "akshay";
 
 module.exports.login = async (req, res) => {
   try {
@@ -80,7 +37,7 @@ module.exports.login = async (req, res) => {
     }
 
     if (user && user.otp.val == otp) {
-      const token = jwt.sign({ email: user.email }, secretKey, {
+      const token = jwt.sign({ email: user.email }, Config.secret, {
         expiresIn: "1h",
       });
 
