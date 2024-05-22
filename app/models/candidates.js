@@ -7,7 +7,7 @@ let validateEmail = (email) => {
  
 const CandidateSchema = new Schema({
   selectedTestType: {
-    type: enum,
+    type: String,
     required: true
   },
   fullName: {
