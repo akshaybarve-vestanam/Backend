@@ -46,8 +46,7 @@ module.exports.login = async (req, res) => {
         secure: false,
         sameSite: "none",
         maxAge: 1000 * 60 * 60 * 24,
-        path: "/",
-        redirectURL: "/dashboard/registration/bulk",
+        path: "/"
       });
 
       return res
@@ -120,7 +119,6 @@ module.exports.requestOtp = async (req, res) => {
 };
 
 module.exports.signup = async (req, res) => {
-  console.log(req.body);
   const { name, email, phoneNumber, address, query } = req.body;
 
   if (!name || !email || !phoneNumber || !address || !query) {
