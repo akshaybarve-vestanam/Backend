@@ -25,13 +25,13 @@ const Candidate = require("../models/candidates");
 
   module.exports.candidates_register = async (req, res) => {
     console.log(req.body)
-    const { candidateID, firstName, lastName, email, phoneNumber, address, organizationID } = req.body;
+    const { selectedTestType, fullName, phoneNumber, email, selectedLabels, testDateTime } = req.body;
 
-        if (!candidateID || !firstName || !lastName || !email || !phoneNumber || !address || !organizationID) {
+        if (!selectedTestType || !fullName) {
             return res.status(400).json({ error: 'Missing or invalid parameters' });
         }
         try {
-        await Candidate.create({ candidateID, firstName, lastName, email, phoneNumber, address, organizationID });
+        await Candidate.create({selectedTestType, fullName, phoneNumber, email, selectedLabels, testDateTime});
         res.json({ message: 'Candidate successfully registered' });
     } catch (error) {
         console.error('Error registering candidate:', error);
