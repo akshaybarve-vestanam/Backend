@@ -216,7 +216,7 @@
             "description": "Test type",
             "in": "formData",
             "required": true,
-            "type": "enum"
+            "type": "array"
           },
           {
             "name": "fullName",
@@ -236,13 +236,14 @@
             "description": "User's email address.",
             "in": "formData",
             "type": "string",
+            "required": true,
             "format": "email"
           },
           {
             "name": "selectedLabels",
             "description": " User's Label",
             "in": "formData",
-            "type": "string"
+            "type": "array"
           },
           {
             "name": "testDateTime",

@@ -7,7 +7,7 @@ let validateEmail = (email) => {
  
 const CandidateSchema = new Schema({
   selectedTestType: {
-    type: String,
+    type: Array,
     required: true
   },
   fullName: {
@@ -18,17 +18,17 @@ const CandidateSchema = new Schema({
   phoneNumber: {
     type: String,
     maxlength: 20,
-    required: [true,"Phone number is missing"]
   },
   email: {
     type: String,
     trim: true,
     lowercase: true,
     validate: [validateEmail, 'Please fill a valid email address'],
-    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
+    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address'],
+    required: true
   },
   selectedLabels: {
-    type: String
+    type: Array
   },
   testDateTime: {
     type: Date,

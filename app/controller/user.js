@@ -38,7 +38,7 @@ module.exports.login = async (req, res) => {
 
     if (user && user.otp.val == otp) {
       const token = jwt.sign({ email: user.email }, Config.secret, {
-        expiresIn: "1h",
+        expiresIn: "24h",
       });
 
       res.cookie("authToken", token, {
