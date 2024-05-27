@@ -20,59 +20,75 @@ const Candidate = require("../models/candidates");
 //     }
 //   }
 
-
-
-
   module.exports.candidates_register = async (req, res) => {
-    console.log(req.body)
     const { selectedTestType, fullName, phoneNumber, email, selectedLabels, testDateTime } = req.body;
-
+    console.log(req.body)
         if (!selectedTestType || !fullName) {
-            return res.status(400).json({ error: 'Missing or invalid parameters' });
+            return res.status(400).json({ s: false, m: 'Missing or invalid parameters' });
         }
         try {
-        await Candidate.create({selectedTestType, fullName, phoneNumber, email, selectedLabels, testDateTime});
-        res.json({ message: 'Candidate successfully registered' });
+            let c = new Candidate({
+                selectedTestType,
+                fullName,
+                phoneNumber,
+                email,
+                selectedLabels,
+                testDateTime
+            })
+          c = await c.save()
+          console.log("==========", c)
+        res.json({ s: true, m: 'Candidate successfully registered' });
     } catch (error) {
         console.error('Error registering candidate:', error);
-        res.json({ error: 'Error registering candidate' });
+        res.json({  s: false, m: 'Error registering candidate' });
     }
 };
 
+module.exports.load_candidates = async (req, res) => {
+    try {
+      const candidates = await Candidate.find();
+      res.json(candidates);
+    } catch (error) {
+      console.error('Error fetching candidates:', error);
+      res.status(500).json({  s: false, m: 'Error fetching candidates' });
+    }
+  };
 
 
 module.exports.candidates_edit = async (req, res) => {
     console.log(req.body);
-    const { candidateID, firstName, lastName, email, phoneNumber, address, organizationID } = req.body;
+    const {fullName, email, phoneNumber, candidateId } = req.body;
 
     try {
-        // Check if candidateID is provided
-        if (!candidateID) {
-            return res.status(400).json({ error: 'Candidate ID is required' });
+
+        if (!fullName && !email && !phoneNumber && !candidateId ) {
+            return res.status(400).json({  s: false, m: 'No fields to update' });
+        }
+        const updateFields = {};
+        if (fullName) updateFields.fullName = fullName;
+        if (email) updateFields.email = email;
+        if (phoneNumber) updateFields.phoneNumber = phoneNumber;
+
+        if (Object.keys(updateFields).length === 0) {
+            return res.status(400).json({ s: false, m: 'No fields to update' });
         }
 
-        // Check if at least one field to update is provided
-        if (!firstName && !lastName && !email && !phoneNumber && !address && !organizationID) {
-            return res.status(400).json({ error: 'No fields to update' });
-        }
 
-        // Process update (update database record, etc.)
-        // For demonstration, assuming Candidate model exists with update method
         const candidate = await Candidate.findOneAndUpdate(
-            { candidateID: candidateID },
-            { $set: { firstName, lastName, email, phoneNumber, address, organizationID } },
-            { new: true }
+            { candidateId: candidateId },
+            { $set: { fullName, email, phoneNumber } },
+            { new: false }
         );
 
         // Check if candidate exists
         if (!candidate) {
-            return res.status(404).json({ error: 'Candidate not found' });
+            return res.status(400).json({  s: false, m: 'Candidate not found' });
         }
 
         // If candidate is successfully updated
-        res.status(200).json({ message: 'Candidate information updated successfully' });
+        res.status(200).json({ s: true, m: 'Candidate information updated successfully' });
     } catch (error) {
         console.error('Error updating candidate:', error);
-        res.status(500).json({ error: 'Error updating candidate' });
+        res.status(500).json({  s: false, m: 'Error updating candidate' });
     }
 };

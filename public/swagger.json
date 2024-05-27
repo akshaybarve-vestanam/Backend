@@ -212,6 +212,12 @@
         "produces": ["application/json"],
         "parameters": [
           {
+            "name": "candidateid",
+            "required": true,
+            "type": "string",
+            "unique": true
+          },
+          {
             "name": "selectedTestType",
             "description": "Test type",
             "in": "formData",

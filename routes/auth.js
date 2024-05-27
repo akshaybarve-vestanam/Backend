@@ -8,5 +8,6 @@ router.get("/labels", labels.get);
 router.post("/labels", labels.create);
 router.post("/candidate/register/individual", candidates.candidates_register);
 router.post("/candidate/edit", candidates.candidates_edit);
+router.get("/candidate",candidates.load_candidates);
 
 module.exports = router;
