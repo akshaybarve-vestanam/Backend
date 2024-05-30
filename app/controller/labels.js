@@ -3,7 +3,8 @@ const Labels = require('../models/labels');
 const { labels } = require('./user');
 
 module.exports.get = async (req, res, next) => {
-    let labels = await Labels.find().select({
+    console.log(req.query)
+    let labels = await Labels.find({ name: { $regex: req.query.q, $options: 'i' } }).limit(5).select({
         _id: 0,
         name: 1
     }).lean();
@@ -11,17 +12,18 @@ module.exports.get = async (req, res, next) => {
 }
 
 module.exports.create = async (req, res, next) => {
-    if (req.body.labels) {
-        for (const lb of req.body.labels) {
-            let existingLable = await Labels.findOne({ name: lb }).select('name').lean()
-            if (!existingLable) {
-                let newLable = new Labels({
-                    name: lb
-                })
-                await newLable.save()
-            }
+    console.log(req.body)
+    if (req.body.name) {
+        let existingLable = await Labels.findOne({ name: req.body.name }).select('name').lean()
+        if (!existingLable) {
+            let newLable = new Labels({
+                name: req.body.name
+            })
+            let savedLable = await newLable.save()
+            return res.json({ s: true, d: { name: savedLable.name }, m: "New Label Created" })
+        } else {
+            return res.json({ s: false })
         }
-        return res.json({ s: true })
     } else {
         return res.json({ s: false, d: 'no labels to create' })
     }
