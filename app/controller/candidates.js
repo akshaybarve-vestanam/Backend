@@ -53,9 +53,36 @@ module.exports.candidates_register = async (req, res) => {
   }
 };
 
+
 module.exports.load_candidates = async (req, res) => {
   try {
-    const candidates = await Candidate.find();
+    const { name, email, phoneNumber, startDate, endDate } = req.query;
+
+    const query = {};
+
+    if (name) {
+      query.fullName = new RegExp(name, 'i'); 
+    }
+
+    if (email) {
+      query.email = new RegExp(email, 'i'); 
+    }
+
+    if (phoneNumber) {
+      query.phoneNumber = new RegExp(phoneNumber);
+    }
+
+    if (startDate || endDate) {
+      query.createdAt = {};
+      if (startDate) {
+        query.createdAt.$gte = new Date(startDate);
+      }
+      if (endDate) {
+        query.createdAt.$lte = new Date(endDate);
+      }
+    }
+
+    const candidates = await Candidate.find(query);
     res.json(candidates);
   } catch (error) {
     console.error("Error fetching candidates:", error);
