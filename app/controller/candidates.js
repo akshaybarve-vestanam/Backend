@@ -55,6 +55,7 @@ module.exports.candidates_register = async (req, res) => {
 
 
 module.exports.load_candidates = async (req, res) => {
+  console.log(query);
   try {
     const { name, email, phoneNumber, startDate, endDate } = req.query;
 
