@@ -90,9 +90,47 @@ module.exports.candidates_register = async (req, res) => {
 //     res.status(500).json({ s: false, m: "Error fetching candidates" });
 //   }
 // };
+// module.exports.load_candidates = async (req, res) => {
+//   try {
+//     const { name, email, phoneNumber, startDate, endDate } = req.query;
+
+//     const query = {};
+
+//     if (name) {
+//       query.fullName = new RegExp(String(name), 'i'); 
+//     }
+
+//     if (email) {
+//       query.email = new RegExp(String(email), 'i'); 
+//     }
+
+//     if (phoneNumber) {
+//       query.phoneNumber = new RegExp(String(phoneNumber));
+//     }
+
+//     if (startDate || endDate) {
+//       query.createdAt = {};
+//       if (startDate) {
+//         query.createdAt.$gte = new Date(startDate);
+//       }
+//       if (endDate) {
+//         query.createdAt.$lte = new Date(endDate);
+//       }
+//     }
+
+//     const candidates = await Candidate.find(query);
+//     res.json(candidates);
+//   } catch (error) {
+//     console.error("Error fetching candidates:", error);
+//     res.status(500).json({ s: false, m: "Error fetching candidates" });
+//   }
+// };
+
+
+
 module.exports.load_candidates = async (req, res) => {
   try {
-    const { name, email, phoneNumber, startDate, endDate } = req.query;
+    const { name, email, phoneNumber, startDate, endDate, label } = req.query;
 
     const query = {};
 
@@ -118,6 +156,10 @@ module.exports.load_candidates = async (req, res) => {
       }
     }
 
+    if (label) {
+      query.selectedLabels = label;
+    }
+
     const candidates = await Candidate.find(query);
     res.json(candidates);
   } catch (error) {
@@ -125,6 +167,9 @@ module.exports.load_candidates = async (req, res) => {
     res.status(500).json({ s: false, m: "Error fetching candidates" });
   }
 };
+
+
+
 
 module.exports.candidates_edit = async (req, res) => {
   console.log(req.body);
@@ -163,3 +208,5 @@ module.exports.candidates_edit = async (req, res) => {
     res.status(500).json({ s: false, m: "Error updating candidate" });
   }
 };
+
+
