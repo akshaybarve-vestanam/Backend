@@ -157,7 +157,7 @@ module.exports.load_candidates = async (req, res) => {
     }
 
     if (label) {
-      query.selectedLabels = label;
+      query.selectedLabels = { $in: label.split(',') };  
     }
 
     const candidates = await Candidate.find(query);
