@@ -130,42 +130,35 @@ module.exports.candidates_register = async (req, res) => {
 
 module.exports.load_candidates = async (req, res) => {
   try {
-    const { name, email, phoneNumber, startDate, endDate, label } = req.query;
 
-    const query = {};
-
-    if (name) {
-      query.fullName = new RegExp(String(name), 'i');
-    }
-
-    if (email) {
-      query.email = new RegExp(String(email), 'i');
-    }
-
-    if (phoneNumber) {
-      query.phoneNumber = new RegExp(String(phoneNumber));
-    }
-
-    if (startDate || endDate) {
-      query.createdAt = {};
-      if (startDate) {
-        query.createdAt.$gte = new Date(startDate);
-      }
-      if (endDate) {
-        query.createdAt.$lte = new Date(endDate);
-      }
-    }
-
-    if (label) {
-      query.selectedLabels = { $in: label.split(',') };
-    }
+    let query = {}
 
     let order = {
       name: "fullName",
       email: "email"
     }
-    console.log(req.query.order)
-    console.log(order[req.query.order])
+
+    console.log(req.query)
+    if (req.query.search) {
+      query = {
+        $or: [
+          { fullName: { $regex: new RegExp(req.query.search, 'i') } },
+          { candidateId: { $regex: new RegExp(req.query.search, 'i') } },
+          { email: { $regex: new RegExp(req.query.search, 'i') } },
+          { phoneNumber: { $regex: new RegExp(req.query.search, 'i') } }
+        ]
+      }
+    }
+
+    if (req.query.startDate && req.query.endDate) {
+      query.createdAt = {}
+      query.createdAt.$gte = new Date(req.query.startDate);
+      query.createdAt.$lte = new Date(req.query.endDate);
+    }
+    if (req.query.labels) {
+      query.selectedLabels = { $in: req.query.labels.split(',') };
+    }
+
     const count = await Candidate.find(query).select({ _id: 1 }).lean();
     const candidates = await Candidate.find(query).sort({ [order[req.query.order] ? order[req.query.order] : 'createdAt']: req.query.dir ? req.query.dir : 'desc' }).skip(req.query.offset).limit(req.query.limit);
 

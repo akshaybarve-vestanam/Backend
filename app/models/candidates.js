@@ -47,6 +47,7 @@ const CandidateSchema = new Schema(
   }
 );
 
+
 CandidateSchema.pre("save", async function (next) {
   console.log("candidate pre save hook called")
     const chars = "0123456789";
