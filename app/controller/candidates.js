@@ -135,11 +135,11 @@ module.exports.load_candidates = async (req, res) => {
     const query = {};
 
     if (name) {
-      query.fullName = new RegExp(String(name), 'i'); 
+      query.fullName = new RegExp(String(name), 'i');
     }
 
     if (email) {
-      query.email = new RegExp(String(email), 'i'); 
+      query.email = new RegExp(String(email), 'i');
     }
 
     if (phoneNumber) {
@@ -157,11 +157,19 @@ module.exports.load_candidates = async (req, res) => {
     }
 
     if (label) {
-      query.selectedLabels = { $in: label.split(',') };  
+      query.selectedLabels = { $in: label.split(',') };
     }
 
-    const candidates = await Candidate.find(query);
-    res.json(candidates);
+    let order = {
+      name: "fullName",
+      email: "email"
+    }
+    console.log(req.query.order)
+    console.log(order[req.query.order])
+    const count = await Candidate.find(query).select({ _id: 1 }).lean();
+    const candidates = await Candidate.find(query).sort({ [order[req.query.order] ? order[req.query.order] : 'createdAt']: req.query.dir ? req.query.dir : 'desc' }).skip(req.query.offset).limit(req.query.limit);
+
+    res.json({ s: true, d: candidates, m: "Candidates List", count: count.length });
   } catch (error) {
     console.error("Error fetching candidates:", error);
     res.status(500).json({ s: false, m: "Error fetching candidates" });
