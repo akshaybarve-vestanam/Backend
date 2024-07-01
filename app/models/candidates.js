@@ -41,6 +41,9 @@ const CandidateSchema = new Schema(
     testDateTime: {
       type: Date,
     },
+    createdAt:{
+      type: timestamp
+    }
   },
   {
     timestamps: true,
