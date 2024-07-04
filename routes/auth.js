@@ -3,7 +3,7 @@ const router = express.Router();
 const user = require("../app/controller/user.js");
 const labels = require("../app/controller/labels.js");
 const candidates = require("../app/controller/candidates.js")
-const companies = require("../app/controller/companies.js");
+const companies = require("../app/controller/company.js");
 
 router.get("/labels", labels.get);
 router.post("/labels", labels.create);
