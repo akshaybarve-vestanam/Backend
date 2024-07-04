@@ -1,5 +1,7 @@
 const Candidate = require("../models/candidates");
-
+const fs = require('fs');
+const archiver = require('archiver');
+const path = require('path');
 // module.exports.candidates_register = async (req, res) => {
 
 //     const { candidateID, firstName, lastName, email, phoneNumber, address, organizationID } = req.body;
@@ -210,4 +212,43 @@ module.exports.candidates_edit = async (req, res) => {
   }
 };
 
+module.exports.download_candidate_data = async (req, res) => {
+  const { candidateId } = req.params;
 
+  try {
+    const candidate = await Candidate.findOne({ candidateId });
+
+    if (!candidate) {
+      return res.status(404).json({ s: false, m: 'Candidate not found' });
+    }
+
+    const outputFilePath = path.join(__dirname, `${candidateId}.zip`);
+    const output = fs.createWriteStream(outputFilePath);
+    const archive = archiver('zip', {
+      zlib: { level: 9 }
+    });
+
+    output.on('close', () => {
+      res.download(outputFilePath, `${candidateId}.zip`, (err) => {
+        if (err) {
+          console.error('Error downloading the file:', err);
+        }
+        fs.unlinkSync(outputFilePath); // Delete the file after download
+      });
+    });
+
+    archive.on('error', (err) => {
+      throw err;
+    });
+
+    archive.pipe(output);
+
+    // Append candidate data as JSON
+    archive.append(JSON.stringify(candidate, null, 2), { name: 'candidate.json' });
+
+    archive.finalize();
+  } catch (error) {
+    console.error('Error downloading candidate data:', error);
+    res.status(500).json({ s: false, m: 'Error downloading candidate data' });
+  }
+};
