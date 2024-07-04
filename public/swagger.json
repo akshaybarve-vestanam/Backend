@@ -601,6 +601,83 @@
           }
         }
       }
+    },
+    "/companies": {
+      "get": {
+        "tags": [
+          "companies"
+        ],
+        "summary": "Load companies",
+        "description": "Returns a list of companies based on search criteria",
+        "operationId": "loadCompanies",
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Search term to filter companies by name, city, or country",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "s": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "d": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "example": "Example Company"
+                      },
+                      "city": {
+                        "type": "string",
+                        "example": "Example City"
+                      },
+                      "country": {
+                        "type": "string",
+                        "example": "Example Country"
+                      }
+                    }
+                  }
+                },
+                "m": {
+                  "type": "string",
+                  "example": "Companies List"
+                },
+                "count": {
+                  "type": "integer",
+                  "example": 10
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error loading companies",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "s": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "m": {
+                  "type": "string",
+                  "example": "Error loading companies"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

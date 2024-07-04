@@ -12,4 +12,5 @@ router.post("/candidate/edit", candidates.candidates_edit);
 router.get("/candidate",candidates.load_candidates);
 router.get("/download/:candidateId", candidates.download_candidate_data);
 router.post("/companies/register", companies.companies_register);
+router.get("/companies", companies.load_companies);
 module.exports = router;
