@@ -501,6 +501,106 @@
           }
         }
       }
+    },
+    "paths": {
+      "/companies/register": {
+        "post": {
+          "summary": "Register a new company",
+          "operationId": "registerCompany",
+          "requestBody": {
+            "description": "Company object that needs to be added",
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Company"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Company successfully registered",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Response"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Missing or invalid parameters",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Response"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Error registering company",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Response"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "Company": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "example": "Example Company",
+              "description": "Name of the company"
+            },
+            "city": {
+              "type": "string",
+              "example": "Example City",
+              "description": "City where the company is located"
+            },
+            "country": {
+              "type": "string",
+              "example": "Example Country",
+              "description": "Country where the company is located"
+            },
+            "division": {
+              "type": "string",
+              "example": "Example Division",
+              "description": "Division of the company"
+            }
+          },
+          "required": [
+            "name",
+            "city",
+            "country"
+          ]
+        },
+        "Response": {
+          "type": "object",
+          "properties": {
+            "s": {
+              "type": "boolean",
+              "example": true,
+              "description": "Status of the response"
+            },
+            "m": {
+              "type": "string",
+              "example": "Company successfully registered",
+              "description": "Message of the response"
+            }
+          }
+        }
+      }
     }
   }
 }
