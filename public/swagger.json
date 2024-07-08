@@ -678,6 +678,61 @@
           }
         }
       }
+    },
+    "/users/register": {
+      "post": {
+        "summary": "Register a new user",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "fullName": {
+                    "type": "string",
+                    "example": "John Doe"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "johndoe@example.com"
+                  },
+                  "mobileNumber": {
+                    "type": "string",
+                    "example": "1234567890"
+                  },
+                  "companies": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "example": "CompanyId123"
+                    }
+                  }
+                },
+                "required": [
+                  "fullName",
+                  "email",
+                  "mobileNumber"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User registered successfully"
+          },
+          "400": {
+            "description": "Missing or invalid parameters"
+          },
+          "404": {
+            "description": "Company not found"
+          },
+          "500": {
+            "description": "Error registering user"
+          }
+        }
+      }
     }
   }
 }

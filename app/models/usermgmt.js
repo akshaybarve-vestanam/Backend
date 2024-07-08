@@ -23,12 +23,11 @@ const UserSchema = new Schema(
       type: String,
       required: [true, "Mobile number is required"],
     },
-    companies: [
+    companies: 
       {
-        type: Schema.Types.ObjectId,
-        ref: "Company",
+        type: String,
       }
-    ]
+    
   },
   {
     timestamps: true,
