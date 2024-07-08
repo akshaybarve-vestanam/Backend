@@ -26,3 +26,26 @@ module.exports.register_user = async (req, res) => {
     res.json({ s: false, m: "Error registering user" });
   }
 };
+
+
+module.exports.load_users = async (req, res) => {
+  try {
+    let query = {};
+
+    if (req.query.search) {
+      query = {
+        $or: [
+          { fullName: { $regex: new RegExp(req.query.search, 'i') } },
+          { email: { $regex: new RegExp(req.query.search, 'i') } },
+          { mobileNumber: { $regex: new RegExp(req.query.search, 'i') } }
+        ]
+      };
+    }
+
+    const users = await User.find(query).populate('companies');
+    res.json({ s: true, d: users, m: "Users List", count: users.length });
+  } catch (error) {
+    console.error("Error loading users:", error);
+    res.status(500).json({ s: false, m: "Error loading users" });
+  }
+};
