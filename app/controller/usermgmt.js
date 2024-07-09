@@ -42,8 +42,19 @@ module.exports.load_users = async (req, res) => {
       };
     }
 
-    const users = await User.find(query).populate('companies');
-    res.json({ s: true, d: users, m: "Users List", count: users.length });
+     // Pagination parameters
+     const offset = parseInt(req.query.offset) || 0; // default to 0 if not provided
+     const limit = parseInt(req.query.limit) || 10; // default to 10 if not provided
+ 
+     // Get total count of users matching the query
+     const count = await User.countDocuments(query);
+ 
+     // Fetch users with pagination
+     const users = await User.find(query)
+                             .populate('companies')
+                             .skip(offset)
+                             .limit(limit);
+    res.json({ s: true, d: users, m: "Users List", count: count });
   } catch (error) {
     console.error("Error loading users:", error);
     res.status(500).json({ s: false, m: "Error loading users" });
