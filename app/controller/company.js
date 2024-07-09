@@ -39,24 +39,37 @@ module.exports.companies_register = async (req, res) => {
 
 
 module.exports.load_companies = async (req, res) => {
-    try {
+  try {
       let query = {};
-  
+
       if (req.query.search) {
-        query = {
-          $or: [
-            { name: { $regex: new RegExp(req.query.search, 'i') } },
-            { city: { $regex: new RegExp(req.query.search, 'i') } },
-            { country: { $regex: new RegExp(req.query.search, 'i') } }
-          ]
-        };
+          query = {
+              $or: [
+                  { name: { $regex: new RegExp(req.query.search, 'i') } },
+                  { city: { $regex: new RegExp(req.query.search, 'i') } },
+                  { country: { $regex: new RegExp(req.query.search, 'i') } }
+              ]
+          };
       }
-  
-      const companies = await Company.find(query);
-      res.json({ s: true, d: companies, m: "Companies List", count: companies.length });
-    } catch (error) {
+
+      // Pagination parameters
+      const offset = parseInt(req.query.offset) || 0; // default to 0 if not provided
+      const limit = parseInt(req.query.limit) || 10; // default to 10 if not provided
+
+      // Get total count of companies matching the query
+      const count = await Company.countDocuments(query);
+
+      // Fetch companies with pagination
+      const companies = await Company.find(query).skip(offset).limit(limit);
+
+
+      
+      
+                                    
+
+      res.json({ s: true, d: companies, m: "Companies List", count: count });
+  } catch (error) {
       console.error("Error loading companies:", error);
       res.status(500).json({ s: false, m: "Error loading companies" });
-    }
-  };
-  
+  }
+};
