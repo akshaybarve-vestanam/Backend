@@ -150,3 +150,15 @@ module.exports.labels = (req, res) => {
   predefinedLabels.push(label);
   res.status(200).json({ m: "Label created successfully", label });
 };
+
+
+module.exports.logout = async (req, res) => {
+  try {
+    res.clearCookie("authToken", { path: "/" }); // Clear the authToken cookie
+
+    return res.status(200).json({ s: true, m: "Logout successful" });
+  } catch (error) {
+    console.error("Error processing logout:", error);
+    return res.status(500).json({ s: false, m: "Server error" });
+  }
+};
