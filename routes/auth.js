@@ -5,7 +5,7 @@ const labels = require("../app/controller/labels.js");
 const candidates = require("../app/controller/candidates.js")
 const companies = require("../app/controller/company.js");
 const user = require("../app/controller/usermgmt.js");
-
+const emailController = require("../app/controller/mail.js");
 
 router.get("/labels", labels.get);
 router.post("/labels", labels.create);
@@ -18,4 +18,5 @@ router.get("/companies", companies.load_companies);
 router.post("/users/register", user.register_user);
 router.get("/users", user.load_users);
 router.post("/logout",users.logout);
+router.post("/send-email", emailController.sendEmail);
 module.exports = router;
