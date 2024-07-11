@@ -1,57 +1,71 @@
 const nodemailer = require("nodemailer");
 const MailTemplate = require("../models/mailtemp.js"); // Ensure the correct path to the model
 
+
+const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+        user: "donotreply@introspects.in",
+        pass: "cmzoiodhrihbafmu"
+    }
+});
+
 const sendEmail = async (req, res) => {
-    const { selectedOption, to, cc, } = req.body;
+    const { selectedOption, to, cc } = req.body;
 
     try {
-        // Fetch the email template from the database
-        const template = await MailTemplate.findOne({ name: selectedOption });
+        
+        let subject = '';
+        let emailBody = '';
 
-        if (!template) {
-            return res.status(400).send({ error: 'Invalid email type selected' });
+        switch (selectedOption) {
+            case 'Registration':
+                subject = 'Registration Email';
+                emailBody = 'Hi, this is a registration email.';
+                break;
+            case 'Instructions':
+                subject = 'Instructions Email';
+                emailBody = 'Hi, this is an instructions email.';
+                break;
+            case 'Reports':
+                subject = 'Reports Email';
+                emailBody = 'Hi, this is a test email.';
+                break;
+            default:
+                return res.status(400).send({ error: 'Invalid email type selected' });
         }
- // Generate the email body based on the selected option
- let emailBody = '';
- switch (selectedOption) {
-     case 'Registration':
-         emailBody = 'Hi, this is a testing mail for mail type: Registration';
-         break;
-     case 'Instructions':
-         emailBody = 'Hi, this is a testing mail for mail type: Instructions';
-         break;
-     case 'Reports':
-         emailBody = 'Hi, this is a testing mail for mail type: Reports';
-         break;
-     default:
-         emailBody = 'Hi, this is a testing mail for an unknown mail type';
- }
-        // Configure your email transport
-        const transporter = nodemailer.createTransport({
-            service: 'gmail', // or your email service
-            auth: {
-                user: 'devavratthokal30@gmail.com', // your email address
-                pass: 'Chhaya@24'   // your email password
-            }
-        });
 
-        // Define the mail options
+        
         const mailOptions = {
-            from: 'devavratthokal30@gmail.com',
+            from: '"Introspects No-reply" <donotreply@introspects.in>',
             to,
             cc,
-            subject: template.subject,
-            text:emailBody
+            subject,
+            text: emailBody
         };
 
-        // Send the email
-        await transporter.sendMail(mailOptions);
-        res.status(200).send({ success: 'Email sent successfully' });
+        if (process.env.NODE_ENV === "production") {
+            transporter.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                    console.log("Error sending email:", error);
+                    return res.json({ s: false, m: "Error sending email" });
+                }
+                console.log("Message sent: " + info.response);
+                return res.json({ s: true, m: "Email sent successfully" });
+            });
+        } else {
+            console.log("Email body:", emailBody);
+            console.log("To:", to);
+            console.log("CC:", cc);
+            return res.json({ s: true, m: "Email sending simulated (development mode)" });
+        }
     } catch (error) {
-        res.status(500).send({ error: 'Failed to send email', details: error });
+        console.error("Error processing request:", error);
+        return res.json({ s: false, m: "Error processing request" });
     }
 };
 
 module.exports = {
     sendEmail
 };
+
