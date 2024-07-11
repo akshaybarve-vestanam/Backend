@@ -19,4 +19,5 @@ router.post("/users/register", user.register_user);
 router.get("/users", user.load_users);
 router.post("/logout",users.logout);
 router.post("/send-email", emailController.sendEmail);
+router.put("/update/:candidateId", candidates.updateCandidate);
 module.exports = router;

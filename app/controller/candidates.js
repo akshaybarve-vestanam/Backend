@@ -252,3 +252,21 @@ module.exports.download_candidate_data = async (req, res) => {
     res.status(500).json({ s: false, m: 'Error downloading candidate data' });
   }
 };
+
+module.exports.updateCandidate = async (req, res) => {
+  const candidateId = req.params.candidateId;
+  const updatedData = req.body;
+
+  try {
+    const candidate = await Candidate.findOneAndUpdate({ candidateId }, updatedData, { new: true });
+
+    if (!candidate) {
+      return res.status(404).json({ success: false, message: 'Candidate not found' });
+    }
+
+    res.status(200).json({ success: true, message: 'Candidate updated successfully', candidate });
+  } catch (error) {
+    console.error('Error updating candidate:', error);
+    res.status(500).json({ success: false, message: 'Error updating candidate' });
+  }
+};
