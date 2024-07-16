@@ -16,7 +16,7 @@ module.exports.register_user = async (req, res) => {
       fullName,
       email,
       mobileNumber,
-      companies,
+      companies
     });
     user = await user.save();
     console.log("==========", user);
@@ -58,5 +58,49 @@ module.exports.load_users = async (req, res) => {
   } catch (error) {
     console.error("Error loading users:", error);
     res.status(500).json({ s: false, m: "Error loading users" });
+  }
+};
+
+
+
+module.exports.users_edit = async (req, res) => {
+  console.log('Request body:', req.body); // Log the entire request body
+  const { userId, fullName, email, mobileNumber, companies } = req.body;
+
+  try {
+    if (!userId && !fullName && !email && !mobileNumber && !companies) {
+      return res.status(400).json({ s: false, m: "No fields to update" });
+    }
+
+    const updateFields = {};
+    if (fullName) updateFields.fullName = fullName;
+    if (email) updateFields.email = email;
+    if (mobileNumber) updateFields.mobileNumber = mobileNumber;
+    if (companies) updateFields.companies = companies;
+
+    if (Object.keys(updateFields).length === 0) {
+      return res.status(400).json({ s: false, m: "No fields to update" });
+    }
+
+    console.log('Update Fields:', updateFields); // Log the fields to be updated
+
+    const user = await User.findOneAndUpdate(
+      { userId: userId },
+      { $set: updateFields },
+      { new: true }
+    );
+
+    console.log(user);
+
+    // Check if user exists
+    if (!user) {
+      return res.status(400).json({ s: false, m: "User not found" });
+    }
+
+    // If user is successfully updated
+    res.status(200).json({ s: true, m: "User information updated successfully", user });
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).json({ s: false, m: "Error updating user" });
   }
 };

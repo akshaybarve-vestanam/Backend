@@ -7,6 +7,9 @@ const companies = require("../app/controller/company.js");
 const user = require("../app/controller/usermgmt.js");
 const emailController = require("../app/controller/mail.js");
 
+
+
+
 router.get("/labels", labels.get);
 router.post("/labels", labels.create);
 router.post("/candidate/register/individual", candidates.candidates_register);
@@ -20,4 +23,5 @@ router.get("/users", user.load_users);
 router.post("/logout",users.logout);
 router.post("/send-email", emailController.sendEmail);
 router.put("/update/:candidateId", candidates.updateCandidate);
+router.put('/users/edit', user.users_edit);
 module.exports = router;
