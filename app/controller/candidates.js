@@ -172,30 +172,34 @@ module.exports.load_candidates = async (req, res) => {
 };
 
 
-
-
 module.exports.candidates_edit = async (req, res) => {
-  console.log(req.body);
-  const { name, emailId, phoneNumber, candidateId } = req.body;
+  console.log('Request body:', req.body); // Log the entire request body
+  const { fullName, email, phoneNumber, candidateId, selectedTestType, selectedLabels } = req.body;
 
   try {
-    if (!name && !emailId && !phoneNumber && !candidateId) {
+    if (!fullName && !email && !phoneNumber && !candidateId && !selectedTestType && !selectedLabels) {
       return res.status(400).json({ s: false, m: "No fields to update" });
     }
+
     const updateFields = {};
-    if (name) updateFields.fullName = name;
-    if (emailId) updateFields.email = emailId;
+    if (fullName) updateFields.fullName = fullName;
+    if (email) updateFields.email = email;
     if (phoneNumber) updateFields.phoneNumber = phoneNumber;
+    if (selectedTestType) updateFields.selectedTestType = selectedTestType;
+    if (selectedLabels) updateFields.selectedLabels = selectedLabels;
 
     if (Object.keys(updateFields).length === 0) {
       return res.status(400).json({ s: false, m: "No fields to update" });
     }
 
+    console.log('Update Fields:', updateFields); // Log the fields to be updated
+
     const candidate = await Candidate.findOneAndUpdate(
       { candidateId: candidateId },
-      { $set: { fullName: name, email: emailId, phoneNumber: phoneNumber } },
-      { new: false }
+      { $set: updateFields },
+      { new: true }
     );
+    console.log(candidate)
 
     // Check if candidate exists
     if (!candidate) {
@@ -203,14 +207,13 @@ module.exports.candidates_edit = async (req, res) => {
     }
 
     // If candidate is successfully updated
-    res
-      .status(200)
-      .json({ s: true, m: "Candidate information updated successfully" });
+    res.status(200).json({ s: true, m: "Candidate information updated successfully", candidate });
   } catch (error) {
     console.error("Error updating candidate:", error);
     res.status(500).json({ s: false, m: "Error updating candidate" });
   }
 };
+
 
 module.exports.download_candidate_data = async (req, res) => {
   const { candidateId } = req.params;
