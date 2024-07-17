@@ -24,4 +24,5 @@ router.post("/logout",users.logout);
 router.post("/send-email", emailController.sendEmail);
 router.put("/update/:candidateId", candidates.updateCandidate);
 router.put('/users/edit', user.users_edit);
+router.put("/companies/edit", companies.edit_company);
 module.exports = router;

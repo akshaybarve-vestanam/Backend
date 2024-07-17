@@ -113,3 +113,39 @@ module.exports.load_companies = async (req, res) => {
       res.status(500).json({ s: false, m: "Error loading companies" });
   }
 };
+
+
+module.exports.edit_company = async (req, res) => {
+  const { companyId, name, city, country, division } = req.body;
+
+  try {
+    if (!companyId && !name && !city && !country && !division) {
+      return res.status(400).json({ s: false, m: "No fields to update" });
+    }
+
+    const updateFields = {};
+    if (name) updateFields.name = name;
+    if (city) updateFields.city = city;
+    if (country) updateFields.country = country;
+    if (division) updateFields.division = division;
+
+    if (Object.keys(updateFields).length === 0) {
+      return res.status(400).json({ s: false, m: "No fields to update" });
+    }
+
+    const company = await Company.findOneAndUpdate(
+      { companyId: companyId },
+      { $set: updateFields },
+      { new: true }
+    );
+
+    if (!company) {
+      return res.status(400).json({ s: false, m: "Company not found" });
+    }
+
+    res.status(200).json({ s: true, m: "Company information updated successfully", company });
+  } catch (error) {
+    console.error("Error updating company:", error);
+    res.status(500).json({ s: false, m: "Error updating company" });
+  }
+};
