@@ -7,13 +7,13 @@
 // const mongoose = require("mongoose");
 // const Schema = mongoose.Schema;
 // const ObjectId = Schema.Types.ObjectId;
- 
+
 // let validateEmail = (email) => {
 //   if (!email || email === '') return true; // Allow empty emails
 //   var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 //   return re.test(email);
 // };
- 
+
 // const CandidateSchema = new Schema(
 //   {
 //     candidateId: {
@@ -84,7 +84,7 @@
 //       type: ObjectId,
 //       ref: "Registrations",
 //     },
-  
+
 //     education: {
 //       type: Array,
 //     },
@@ -139,19 +139,19 @@
 //     timestamps: true,
 //   }
 // );
- 
+
 // CandidateSchema.pre("save", async function (next) {
 //   console.log("candidate pre save hook called");
 //   const chars = "0123456789";
 //   let candidateid = "";
 //   let isUnique = false;
- 
+
 //   while (!isUnique) {
 //     candidateid = "S";
 //     for (let i = 0; i < 6; i++) {
 //       candidateid += chars.charAt(Math.floor(Math.random() * chars.length));
 //     }
- 
+
 //     const existingCandidate = await Candidate.findOne({ candidateid });
 //     if (!existingCandidate) {
 //       isUnique = true;
@@ -163,9 +163,9 @@
 //   this.candidateId = candidateid;
 //   next();
 // });
- 
+
 // const Candidate = mongoose.model("Candidate", CandidateSchema);
- 
+
 // module.exports = Candidate;
 
 
@@ -232,7 +232,7 @@ const CandidateSchema = new Schema(
     },
     messageCount: {
       type: Number,
-      default:0
+      default: 0
     },
     name: {
       type: String,
@@ -253,10 +253,10 @@ const CandidateSchema = new Schema(
     },
     education: {
       type: [String],
-  },
-  examId: {
+    },
+    examId: {
       type: [String],
-  },
+    },
     fName: {
       type: String,
     },
@@ -301,10 +301,23 @@ const CandidateSchema = new Schema(
     },
     project: {
       type: String,
-  },
-  address:{
-    type: String,
-  }
+    },
+    address: {
+      type: String,
+    },
+    mol: {
+      type: String
+    },
+    mt: {
+      type: String
+    },
+    wiwtob: {
+      type: String
+    },
+    userId: {
+      type: String,
+      unique: true,
+    },
   },
   {
     timestamps: true,

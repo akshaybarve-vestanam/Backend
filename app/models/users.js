@@ -1,5 +1,11 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+let validateEmail = (email) => {
+    if (!email) return true; // Allow empty or undefined emails
+    if (email === 'unknown') return true; // Explicitly allow 'unknown' value
+    var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    return re.test(email);
+  };
 
 const userSchema = new Schema({
     belongTo: {
@@ -44,10 +50,7 @@ const userSchema = new Schema({
     project: {
         type: String,
     },
-    userId: {
-        type: String,
-        unique: true,
-    },
+    
     city: {
         type: String,
     },
@@ -60,7 +63,28 @@ const userSchema = new Schema({
     address:{
         type:String
     },
-    
+    mol:{
+        type:String
+    },
+    mt:{
+        type:String
+    },
+    wiwtob:{
+        type:String
+    },
+    userId: {
+        type: String,
+        unique: true,
+    },
+     email: {
+        type: String,
+        trim: true,
+        lowercase: true,
+        validate: {
+            validator: validateEmail,
+            message: "Please fill a valid email address",
+        },
+    },
 }, {
     timestamps: true
 });
