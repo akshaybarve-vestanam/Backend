@@ -189,7 +189,7 @@ const CandidateSchema = new Schema(
     },
     selectedTestType: {
       type: String,
-      required: true,
+      //required: true,
     },
     fullName: {
       type: String,
@@ -232,6 +232,7 @@ const CandidateSchema = new Schema(
     },
     messageCount: {
       type: Number,
+      default:0
     },
     name: {
       type: String,
@@ -240,23 +241,22 @@ const CandidateSchema = new Schema(
       type: Number,
     },
     project: {
-      type: Schema.Types.Mixed,
+      type: String,
     },
     belongTo: {
       type: ObjectId,
-      ref: "Registrations",
+      ref: "User",
     },
     user: {
       type: ObjectId,
-      ref: "Registrations",
+      ref: "User",
     },
     education: {
-      type: Array,
-    },
-    examId: [{
-      type: ObjectId,
-      ref: "Users",
-    }],
+      type: [String],
+  },
+  examId: {
+      type: [String],
+  },
     fName: {
       type: String,
     },
@@ -285,20 +285,26 @@ const CandidateSchema = new Schema(
       type: String,
     },
     mobileNo: {
-      type: Number,
+      type: Schema.Types.Mixed,
     },
     belongTo: {
       type: ObjectId,
-      ref: "Users",
+      ref: "Registration",
     },
     examName: {
       type: ObjectId,
-      ref: "Users",
+      ref: "Registration",
     },
     reg: {
       type: ObjectId,
-      ref: "Users",
+      ref: "Registration",
     },
+    project: {
+      type: String,
+  },
+  address:{
+    type: String,
+  }
   },
   {
     timestamps: true,
