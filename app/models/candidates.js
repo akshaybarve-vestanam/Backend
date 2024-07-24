@@ -351,3 +351,173 @@ CandidateSchema.pre("save", async function (next) {
 const Candidate = mongoose.model("Candidate", CandidateSchema);
 
 module.exports = Candidate;
+
+
+
+
+
+
+
+// const mongoose = require("mongoose");
+// const Schema = mongoose.Schema;
+// const ObjectId = Schema.Types.ObjectId;
+
+// // Email validation function
+// const validateEmail = (email) => {
+//   if (!email) return true; // Allow empty or undefined emails
+//   if (email === 'unknown') return true; // Explicitly allow 'unknown' value
+//   const re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+//   return re.test(email);
+// };
+
+// // Define Candidate Schema
+// const CandidateSchema = new Schema(
+//   {
+//     candidateId: {
+//       type: String,
+//       unique: true,
+//       required: true // Ensure candidateId is required
+//     },
+//     selectedTestType: {
+//       type: String,
+//       // required: true,
+//     },
+//     fullName: {
+//       type: String,
+//       required: [true, "Full name is required"], // Adjusted validation message
+//       maxlength: 100,
+//     },
+//     phoneNumber: {
+//       type: String,
+//       maxlength: 20,
+//     },
+//     email: {
+//       type: String,
+//       trim: true,
+//       lowercase: true,
+//       validate: {
+//         validator: validateEmail,
+//         message: "Please fill a valid email address",
+//       },
+//     },
+//     selectedLabels: {
+//       type: [String], // Use array of strings if labels are strings
+//     },
+//     testDateTime: {
+//       type: Date,
+//     },
+//     firstName: {
+//       type: String,
+//     },
+//     middleName: {
+//       type: String,
+//     },
+//     lastName: {
+//       type: String,
+//     },
+//     status: {
+//       type: String,
+//     },
+//     category: {
+//       type: String,
+//     },
+//     messageCount: {
+//       type: Number,
+//       default: 0
+//     },
+//     name: {
+//       type: String,
+//     },
+//     countryCode: {
+//       type: Number,
+//     },
+//     project: {
+//       type: String,
+//     },
+//     belongTo: {
+//       type: ObjectId,
+//       ref: "User",
+//     },
+//     user: {
+//       type: ObjectId,
+//       ref: "User",
+//     },
+//     education: {
+//       type: [String],
+//     },
+//     examId: {
+//       type: [String],
+//     },
+//     gender: {
+//       type: String,
+//     },
+//     dob: {
+//       type: Date,
+//     },
+//     curriculum: {
+//       type: String,
+//     },
+//     city: {
+//       type: String,
+//     },
+//     pincode: {
+//       type: String,
+//     },
+//     state: {
+//       type: String,
+//     },
+//     mobileNo: {
+//       type: Schema.Types.Mixed,
+//     },
+//     address: {
+//       type: String,
+//     },
+//     mol: {
+//       type: String
+//     },
+//     mt: {
+//       type: String
+//     },
+//     wiwtob: {
+//       type: String
+//     },
+//     userId: {
+//       type: String,
+//       unique: true,
+//     },
+//   },
+//   {
+//     timestamps: true,
+//   }
+// );
+
+// // Pre-save hook to generate unique candidateId
+// CandidateSchema.pre("save", async function (next) {
+//   console.log("candidate pre-save hook called");
+//   const chars = "0123456789";
+//   let candidateId = "";
+//   let isUnique = false;
+
+//   while (!isUnique) {
+//     candidateId = "S";
+//     for (let i = 0; i < 6; i++) {
+//       candidateId += chars.charAt(Math.floor(Math.random() * chars.length));
+//     }
+
+//     // Check if candidateId already exists
+//     const existingCandidate = await Candidate.findOne({ candidateId });
+//     if (!existingCandidate) {
+//       isUnique = true;
+//     } else {
+//       console.log(`Duplicate candidate ID found: ${candidateId}. Generating a new ID.`);
+//     }
+//   }
+
+//   console.log("Generated candidateId:", candidateId);
+//   this.candidateId = candidateId;
+//   next();
+// });
+
+// // Create and export the model
+// const Candidate = mongoose.model("Candidate", CandidateSchema);
+// module.exports = Candidate;
