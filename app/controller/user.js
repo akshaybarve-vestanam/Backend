@@ -118,27 +118,52 @@ module.exports.requestOtp = async (req, res) => {
   }
 };
 
+// module.exports.signup = async (req, res) => {
+//   const { name, email, phoneNumber, address, query } = req.body;
+
+//   if (!name || !email || !phoneNumber || !address || !query) {
+//     return res.json({ s: false, d: "Please fill in all the details" });
+//   }
+
+//   try {
+//     let user1 = await Users.create({
+//       name,
+//       email,
+//       phoneNumber,
+//       address,
+//       query,
+//     });
+//     res.json({ s: true, d: "User registered successfully" });
+//   } catch (error) {
+//     console.error("Error creating user:", error);
+//     res.json({ s: false, d: "Error registering user" });
+//   }
+// };
+
+
 module.exports.signup = async (req, res) => {
   const { name, email, phoneNumber, address, query } = req.body;
 
   if (!name || !email || !phoneNumber || !address || !query) {
-    return res.json({ s: false, d: "Please fill in all the details" });
+    return res.status(400).json({ s: false, m: "Please fill in all the details" });
   }
 
   try {
-    let user1 = await Users.create({
+    let user = await Users.create({
       name,
       email,
       phoneNumber,
       address,
       query,
     });
-    res.json({ s: true, d: "User registered successfully" });
+    res.status(201).json({ s: true, m: "User registered successfully" });
   } catch (error) {
     console.error("Error creating user:", error);
-    res.json({ s: false, d: "Error registering user" });
+    res.status(500).json({ s: false, m: "Error registering user" });
   }
 };
+
+
 
 module.exports.labels = (req, res) => {
   const { label } = req.body;

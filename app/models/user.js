@@ -12,11 +12,10 @@ const Users = new Schema({
     type: String,
     required: [true, 'Name Is Missing']
   },
-  username:{
-      type:String,
-      unique:true,
-      trim:true
-  },
+  // username:{
+  //     type:String,
+  //     trim:true
+  // },
   phoneNumber: {
     type: Number,
     minlength: 10,
@@ -31,6 +30,14 @@ const Users = new Schema({
     match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address'],
     unique : true
   },
+  address: {
+    type: String,
+    required: [true, 'Address is missing']
+  },
+  query: {
+    type: String,
+    required: [true, 'Query is missing']
+  },
   docs: [{
     type: String
   }],
@@ -44,4 +51,4 @@ const Users = new Schema({
   });
 
 
-module.exports = mongoose.model('Users', Users);
+module.exports = mongoose.model('Usersignup', Users);
