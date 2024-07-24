@@ -89,6 +89,12 @@ db.once('open', async function () {
       if (registration.user) {
         const email = (registration.email && registration.email.trim()) || registration.user.email;
 
+        const fullName = (registration.firstName && registration.lastName)
+          ? `${registration.firstName} ${registration.middleName || ''} ${registration.lastName}`
+          : `${registration.user.fName || ''} ${registration.user.mName || ''} ${registration.user.lName || ''}`.trim();
+          
+        const phoneNumber = registration.mobileNo || registration.user.mobileNo;
+
         data.push({
           selectedTestType: null,
           fullName: `${registration.firstName} ${registration.middleName} ${registration.lastName}`,
