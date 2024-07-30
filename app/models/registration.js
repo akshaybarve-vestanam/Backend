@@ -59,8 +59,8 @@ const registrationSchema = new Schema({
         ref: 'User',
     },
     userId: {
-        type: Number,
-        unique: true,
+        type: String,
+       
     },
 }, {
     timestamps: true

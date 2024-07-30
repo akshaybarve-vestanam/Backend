@@ -316,7 +316,6 @@ const CandidateSchema = new Schema(
     },
     userId: {
       type: String,
-      unique: true,
     },
   },
   {
@@ -483,7 +482,6 @@ module.exports = Candidate;
 //     },
 //     userId: {
 //       type: String,
-//       unique: true,
 //     },
 //   },
 //   {

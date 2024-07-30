@@ -74,7 +74,7 @@ const userSchema = new Schema({
     },
     userId: {
         type: String,
-        unique: true,
+        
     },
      email: {
         type: String,
